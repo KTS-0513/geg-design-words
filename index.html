@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="AI 画像生成で「〇〇風」と頼むためのデザインワード55語を、意味・ロゴ向きか・頼み方の例・見本の画像・出典つきで集めたページ（GEG All Hokkaido デザインコンペ 2026）">
+<style>
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<title>デザインワード図鑑</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: スイス・グリッド。左に小見出しの列、右に本文。左揃えで、区切りは太罫と細罫だけ */
+:root {
+  --paper: #FAFAF8;
+  --ink: #1B1B19;
+  --mute: #63635C;
+  --rule: #D8D8D1;
+  --wash: #EFEFEA;
+  --accent: #CF2A1F;
+  --accent-ink: #FFFFFF;
+  --f-display: "Archivo", "Noto Sans JP", system-ui, sans-serif;
+  --f-body: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #141413; --ink: #ECECE6; --mute: #A3A39B; --rule: #36362F; --wash: #1F1F1D;
+    --accent: #FF5E50; --accent-ink: #141413; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #141413; --ink: #ECECE6; --mute: #A3A39B; --rule: #36362F; --wash: #1F1F1D;
+  --accent: #FF5E50; --accent-ink: #141413; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+a { color: inherit; text-decoration-color: var(--rule); text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p { margin: 0; }
+.mono { font-family: var(--f-mono); }
+.label {
+  font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--mute);
+}
+
+/* ---- 表紙 ---- */
+.cover { padding-block: 40px 32px; border-bottom: 3px solid var(--ink); }
+.cover .label { color: var(--accent); }
+.cover .big {
+  font-family: var(--f-display); font-weight: 800; letter-spacing: -.02em;
+  font-size: clamp(56px, 13vw, 156px); line-height: .86; margin: 18px 0 14px;
+}
+.cover h1 { font-size: clamp(26px, 4.2vw, 40px); font-weight: 900; line-height: 1.3; }
+.cover .lead { margin-top: 14px; max-width: 40em; color: var(--mute); }
+.cover .lead strong { color: var(--ink); font-weight: 700; }
+
+/* ---- 段（左に見出しの列） ---- */
+.row {
+  display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px 40px;
+  padding-block: 36px; border-bottom: 1px solid var(--rule);
+}
+.row > header { display: flex; flex-direction: column; gap: 6px; }
+.row > header h2 { font-size: 22px; font-weight: 900; line-height: 1.4; }
+.row > div { min-width: 0; }
+@media (max-width: 760px) { .row { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 28px; } }
+
+/* ---- 頼み方の型 ---- */
+.formula { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; }
+.formula .cell {
+  flex: 1 1 180px; min-width: 0; border: 2px solid var(--ink); padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.formula .cell b { font-size: 20px; font-weight: 900; }
+.formula .cell small { color: var(--mute); font-size: 13px; line-height: 1.5; }
+.formula .cell.key { border-color: var(--accent); }
+.formula .cell.key b { color: var(--accent); }
+.formula .plus { align-self: center; font-family: var(--f-display); font-weight: 800; font-size: 24px; color: var(--mute); }
+.example { margin-top: 16px; padding: 14px 16px; background: var(--wash); }
+.example .label { display: block; margin-bottom: 4px; }
+.note { margin-top: 10px; font-size: 13px; color: var(--mute); line-height: 1.6; }
+
+/* ---- 見くらべ ---- */
+.base { padding: 12px 14px; background: var(--wash); font-size: 14.5px; line-height: 1.75; margin-bottom: 20px; }
+.base .label { display: block; margin-bottom: 2px; }
+.base b { color: var(--accent); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px 16px; }
+.tile { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.frame {
+  aspect-ratio: 1 / 1; max-width: 100%; width: 100%; border: 1px solid var(--rule);
+  background: var(--wash); display: grid; place-items: center; overflow: hidden;
+}
+.frame img { width: 100%; height: 100%; object-fit: contain; display: block; background: #FFFFFF; }
+.frame .wait { font-family: var(--f-mono); font-size: 12px; color: var(--mute); letter-spacing: .06em; }
+.tile .name { font-size: 15px; font-weight: 900; line-height: 1.4; display: flex; justify-content: space-between; gap: 6px; align-items: baseline; }
+.tile .name .fit { font-weight: 400; }
+.tile .btns button { font-size: 12.5px; padding: 5px 8px; }
+.tile .sr { font-size: 12.5px; line-height: 1.6; background: var(--wash); padding: 8px 10px; word-break: break-word; }
+.card figure { margin: 4px 0 2px; }
+.card figcaption { font-size: 12px; color: var(--mute); margin-top: 4px; }
+
+/* ---- 組み立て ---- */
+.builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 32px; }
+@media (max-width: 900px) { .builder { grid-template-columns: minmax(0, 1fr); } }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field > span { font-size: 13px; font-weight: 700; }
+select, input[type="text"], input[type="search"] {
+  font: inherit; font-size: 15px; color: var(--ink); background: var(--paper);
+  border: 1px solid var(--ink); border-radius: 4px; padding: 9px 10px; width: 100%; min-width: 0;
+}
+.checks { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.checks label { display: flex; gap: 8px; align-items: flex-start; line-height: 1.5; }
+.checks input { margin-top: 4px; accent-color: var(--accent); }
+.out { border: 2px solid var(--ink); display: flex; flex-direction: column; min-width: 0; }
+.out .label { padding: 10px 14px 0; }
+.out output {
+  display: block; padding: 8px 14px 14px; white-space: pre-wrap; word-break: break-word;
+  font-size: 15px; line-height: 1.8; min-height: 9em;
+}
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+button {
+  font: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+  border: 1px solid var(--ink); background: var(--paper); color: var(--ink);
+  border-radius: 4px; padding: 7px 12px; line-height: 1.3;
+}
+button:hover { border-color: var(--accent); color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+button.primary:hover { color: var(--accent-ink); filter: brightness(1.06); }
+.out .btns { padding: 0 14px 14px; margin-top: auto; }
+.copied { font-size: 13px; color: var(--mute); align-self: center; }
+
+/* ---- 言葉の一覧 ---- */
+.controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 8px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px 18px; border-bottom: 1px solid var(--rule); }
+.tabs button {
+  border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none;
+  padding: 6px 0 8px; font-weight: 700; color: var(--mute);
+}
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.tabs button .n { font-family: var(--f-mono); font-weight: 400; font-size: 12px; margin-left: 4px; }
+.filters { display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center; }
+.filters input[type="search"] { max-width: 320px; }
+.filters label { display: flex; gap: 6px; align-items: center; font-size: 14px; }
+.filters input[type="checkbox"] { accent-color: var(--accent); }
+.count { font-size: 13px; color: var(--mute); }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 8px 32px; }
+@media (max-width: 420px) { .cards { grid-template-columns: minmax(0, 1fr); } }
+.card { border-top: 2px solid var(--ink); padding-block: 14px 22px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.card .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.card .cat { color: var(--accent); }
+.fit { font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--ink); padding: 1px 6px; white-space: nowrap; }
+.card h3 { font-size: 22px; font-weight: 900; line-height: 1.35; }
+.card .en { font-family: var(--f-mono); font-size: 13px; color: var(--mute); word-break: break-word; }
+.card .def { font-size: 14.5px; line-height: 1.7; }
+.card ul { margin: 0; padding-left: 1.1em; font-size: 14px; line-height: 1.65; color: var(--mute); }
+.card .why { font-size: 13px; color: var(--mute); line-height: 1.6; }
+.card .g { font-size: 12.5px; color: var(--accent); line-height: 1.5; }
+.card .ex { background: var(--wash); padding: 10px 12px; font-size: 14px; line-height: 1.7; }
+.card .src { font-size: 12px; color: var(--mute); line-height: 1.6; word-break: break-word; }
+.empty { padding: 28px 0; color: var(--mute); }
+
+/* ---- コツ・注意 ---- */
+.points { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px 32px; }
+.point { border-top: 2px solid var(--ink); padding-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.point h3 { font-size: 18px; font-weight: 900; line-height: 1.45; }
+.point p { font-size: 14.5px; color: var(--mute); line-height: 1.7; }
+.point q { quotes: "“" "”"; font-family: var(--f-mono); font-size: 13px; color: var(--ink); }
+.caution .point { border-top-color: var(--accent); }
+.sources ol { margin: 0; padding-left: 1.4em; font-size: 14px; line-height: 1.7; }
+.sources li { margin-bottom: 6px; word-break: break-word; }
+footer.end { padding-block: 28px 48px; font-size: 13px; color: var(--mute); display: flex; flex-wrap: wrap; gap: 6px 24px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="cover">
+    <p class="label">GEG All Hokkaido · Design Competition · 2026.10.29</p>
+    <p class="big" aria-hidden="true">DESIGN<br>WORDS</p>
+    <h1>デザインワード図鑑</h1>
+    <p class="lead">AI に絵を頼むとき、<strong>「〇〇風」のひとこと</strong>で方向が決まります。アイソメトリック、スイススタイル、家紋風……。ロゴづくりに使える言葉を、意味と頼み方の例つきで集めました。</p>
+  </section>
+
+  <section class="row" id="formula">
+    <header><span class="label">How to ask</span><h2>頼み方の型</h2></header>
+    <div>
+      <div class="formula">
+        <div class="cell key"><b>スタイル</b><small>〇〇風。この図鑑の言葉</small></div>
+        <span class="plus" aria-hidden="true">+</span>
+        <div class="cell"><b>何を</b><small>モチーフ。雪の結晶、ヒグマ など</small></div>
+        <span class="plus" aria-hidden="true">+</span>
+        <div class="cell"><b>背景・条件</b><small>白い背景、正方形、3色まで</small></div>
+      </div>
+      <div class="example">
+        <span class="label">例</span>
+        アイソメトリック（isometric）のスタイルで、GEG All Hokkaido のスタッフ用ロゴを作ってください。雪の結晶の形をした小さな島をモチーフにします。正方形、白い背景、色は3色まで。
+      </div>
+      <p class="note">Google のプロンプトガイドは、頼み方の要素を「被写体・背景・スタイル」の3つで説明し、スタイルの例に isometric 3D や pastel painting を挙げています〔出典1〕。</p>
+    </div>
+  </section>
+
+  <section class="row" id="compare">
+    <header><span class="label">Compare</span><h2>言葉だけ変えると</h2><p class="note">見本は、同じ頼み方で「〇〇風」の言葉だけを変えて、Gemini で作りました（毎回新しいチャット・2026年10月25日）。55語すべての見本は、下の一覧のカードにあります。</p></header>
+    <div>
+      <p class="base"><span class="label">見本の頼み方</span>「GEG ALL Hokkaido のロゴを作ります。<b>〇〇風</b>で作成してください。正方形で作ってください。Googleの4色は使わないでください。」</p>
+      <div class="tiles" id="tiles"></div>
+    </div>
+  </section>
+
+  <section class="row" id="builder">
+    <header><span class="label">Build</span><h2>組み立てる</h2><p class="note">言葉を選ぶと、ロゴを頼む文ができます。そのまま Gemini に貼れます。</p></header>
+    <div class="builder">
+      <div>
+        <label class="field"><span>スタイル（〇〇風）</span><select id="b-style"></select></label>
+        <label class="field"><span>何を（モチーフ）</span><input id="b-subject" type="text" value="雪の結晶とヒグマ"></label>
+        <label class="field"><span>入れる文字（引用符の中にそのまま入ります）</span><input id="b-text" type="text" value="GEG All Hokkaido / STAFF"></label>
+        <div class="field"><span>条件</span>
+          <div class="checks">
+            <label><input id="b-square" type="checkbox" checked>正方形・白い背景</label>
+            <label><input id="b-color" type="checkbox" checked>色は3色まで</label>
+            <label><input id="b-simple" type="checkbox" checked>小さくしても分かるシンプルな形</label>
+            <label><input id="b-google" type="checkbox" checked>Google のロゴや4色の配色は使わない</label>
+          </div>
+        </div>
+      </div>
+      <div class="out">
+        <span class="label">Gemini に貼る文</span>
+        <output id="b-out" for="b-style b-subject b-text"></output>
+        <div class="btns"><button class="primary" id="b-copy" type="button">コピー</button><span class="copied" id="b-copied" aria-live="polite"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="row" id="words">
+    <header><span class="label">Words</span><h2>言葉の一覧</h2><p class="note">「組み立てる」を押すと、上の欄に入ります。</p><p class="note">ロゴの ◎○△ は、今回のロゴの条件（正方形・3色まで・小さくしても分かる）に照らした目安です。頼み方は作例で、出る画像は毎回変わります。</p></header>
+    <div>
+      <div class="controls">
+        <div class="tabs" role="tablist" id="tabs"></div>
+        <div class="filters">
+          <input id="q" type="search" placeholder="言葉をさがす（例：線、和、3D）" aria-label="言葉をさがす">
+          <label><input id="logo-only" type="checkbox">ロゴ向き（◎）だけ</label>
+          <span class="count" id="count" aria-live="polite"></span>
+        </div>
+      </div>
+      <div class="cards" id="cards"></div>
+    </div>
+  </section>
+
+  <section class="row" id="tips">
+    <header><span class="label">Tips</span><h2>うまく頼むコツ</h2><p class="note">Google の公式の説明から</p></header>
+    <div class="points">
+      <div class="point"><h3>言葉を並べず、文章で説明する</h3><p>キーワードの羅列より、場面を説明する文のほうが、まとまった画像になります。<q>Describe the scene, don't just list keywords.</q>〔出典3〕</p></div>
+      <div class="point"><h3>目的を伝える</h3><p>「ロゴを作って」より「〇〇のためのロゴ」。何に使うかを書くと結果がよくなります〔出典3〕。</p></div>
+      <div class="point"><h3>文字は引用符で、短く</h3><p>入れたい文字は "" の中に正確に書き、フォントの感じ（太い・細い）も添えます〔出典3〕。先に文字を決めてから画像を頼むと、うまくいきやすい〔出典2〕。</p></div>
+      <div class="point"><h3>一度で決めず、会話で直す</h3><p>「色を2色に」「ほかはそのままで、文字だけ太く」と少しずつ直します。特徴がずれてきたら、新しい会話で始め直します〔出典3〕。</p></div>
+    </div>
+  </section>
+
+  <section class="row caution" id="caution">
+    <header><span class="label">Caution</span><h2>使わない言葉</h2></header>
+    <div class="points">
+      <div class="point"><h3>実在の作家名・作品名・キャラクター名</h3><p>様式名（〇〇風）は使えます。作風はアイデアで、著作権の保護の対象ではないとされています。一方、作品名などの固有名詞を入れると「依拠性」が認められうるとされています〔出典5〕。</p></div>
+      <div class="point"><h3>企業のロゴ・Google の G マーク</h3><p>既存のロゴに似せない。Google のロゴや4色の配色はまねしません（今回のスタッフロゴの条件）。</p></div>
+      <div class="point"><h3>AI で作ったことは隠さない</h3><p>Google の利用規約は、AI の生成物を人間が作ったと誤解させることを禁じています〔出典6〕。</p></div>
+    </div>
+  </section>
+
+  <section class="row sources" id="sources">
+    <header><span class="label">Sources</span><h2>出典</h2><p class="note">2026年10月25日確認</p></header>
+    <div>
+      <ol>
+        <li>Google Cloud「Prompt and image attribute guide」（Vertex AI・Imagen） <a href="https://cloud.google.com/vertex-ai/generative-ai/docs/image/img-gen-prompt-guide" target="_blank" rel="noopener">cloud.google.com</a></li>
+        <li>Google AI for Developers「Nano Banana image generation」（Gemini API） <a href="https://ai.google.dev/gemini-api/docs/image-generation" target="_blank" rel="noopener">ai.google.dev</a></li>
+        <li>Google Developers Blog「How to prompt Gemini 2.5 Flash Image Generation for the best results」 <a href="https://developers.googleblog.com/en/how-to-prompt-gemini-2-5-flash-image-generation-for-the-best-results/" target="_blank" rel="noopener">developers.googleblog.com</a></li>
+        <li>Gemini アプリ ヘルプ「Gemini アプリで画像を生成、編集する」 <a href="https://support.google.com/gemini/answer/14286560?hl=ja" target="_blank" rel="noopener">support.google.com</a></li>
+        <li>文化審議会著作権分科会法制度小委員会「AIと著作権に関する考え方について」（令和6年3月15日） <a href="https://www.bunka.go.jp/seisaku/bunkashingikai/chosakuken/pdf/94037901_01.pdf" target="_blank" rel="noopener">bunka.go.jp（PDF）</a></li>
+        <li>Google 利用規約（2026年7月30日発効） <a href="https://policies.google.com/terms?hl=ja" target="_blank" rel="noopener">policies.google.com</a></li>
+      </ol>
+      <p class="note">言葉ごとの定義の出典は、各カードの下に載せています。</p>
+    </div>
+  </section>
+
+  <footer class="end">
+    <span>GEG All Hokkaido Leaders · 2026.10.25</span>
+    <span>見本の画像は、当日みんなで作ります。</span>
+  </footer>
+</div>
+
+<script>
+/* 言葉のデータ。cat は CATS の key。logo は ◎○△ */
+const W = "https://ja.wikipedia.org/wiki/", WE = "https://en.wikipedia.org/wiki/", TATE = "https://www.tate.org.uk/art/art-terms/";
+const ja = (p) => ({ label: "Wikipedia", url: W + p });
+const en = (p) => ({ label: "Wikipedia（英）", url: WE + p });
+const tate = (p) => ({ label: "Tate", url: TATE + p });
+const GAPI = { label: "Gemini API", url: "https://ai.google.dev/gemini-api/docs/image-generation" };
+
+const WORDS = [
+  /* ---- 様式・運動 ---- */
+  { id: "swiss", cat: "movement", ja: "スイススタイル", en: "Swiss Style / International Typographic Style", era: "1950〜60年代・スイス",
+    def: "単純さ・明快さ・読みやすさを重んじ、格子（グリッド）で組むグラフィックデザインの様式です。",
+    features: ["格子に沿った非対称のレイアウト", "サンセリフ体を左揃えで組む", "イラストより写真を好む"],
+    logo: "○", logoWhy: "短い文字を格子で組むロゴに向きます。写真や長い文は小さくすると潰れます。",
+    example: "スイススタイルで、白地に赤と黒の2色。左寄せの太いゴシック体で \"GEG All Hokkaido\" と入れた正方形のロゴ",
+    sources: [en("International_Typographic_Style")] },
+  { id: "bauhaus", cat: "movement", ja: "バウハウス", en: "Bauhaus", era: "1919〜33年・ドイツ",
+    def: "ドイツにあった美術学校の名前で、その合理的・機能的なデザインも指します。装飾を省き、大量生産に向く形を求めました。",
+    features: ["円・三角・四角などの単純な幾何学形", "凝った装飾をしない", "合理的でシンプル"],
+    logo: "◎", logoWhy: "円・三角・四角で組めて、3色に収めやすいです。",
+    example: "バウハウス風に、円・三角・四角だけで北海道の形を表した正方形のスタッフロゴ。色は3色まで",
+    sources: [ja("バウハウス"), en("Bauhaus"), tate("b/bauhaus")] },
+  { id: "artdeco", cat: "movement", ja: "アール・デコ", en: "Art Deco", era: "1910〜30年代・パリから世界へ",
+    def: "1920〜30年代に世界で流行した、建築・装飾・製品の様式です。名前は1925年のパリ装飾美術博覧会に由来します。",
+    features: ["ジグザグやシェブロンなどの幾何学模様", "直線と円弧の文様", "原色どうしの対比"],
+    logo: "○", logoWhy: "装飾を絞れば強いマークになります。細かい模様は小さくすると潰れます。",
+    example: "アール・デコ調で、金と紺の2色。左右対称の幾何学模様の中に雪の結晶を置いた円形のエンブレム",
+    g: "Vertex AI（Imagen）のガイド", sources: [ja("アール・デコ"), en("Art_Deco"), tate("a/art-deco")] },
+  { id: "nouveau", cat: "movement", ja: "アール・ヌーヴォー", en: "Art Nouveau", era: "1890〜1910年ごろ・ヨーロッパ",
+    def: "19世紀末から20世紀初めにヨーロッパで花開いた美術運動です。「新しい芸術」という意味です。",
+    features: ["植物を思わせる流れる曲線", "非対称で動きのある構図", "鉄やガラスなど新しい素材"],
+    logo: "△", logoWhy: "細い曲線と装飾が多く、3色・小さいサイズでは潰れやすいです。",
+    example: "アール・ヌーヴォー風に、流れる曲線の植物模様で縁取ったスズランのイラスト。2色",
+    sources: [ja("アール・ヌーヴォー"), en("Art_Nouveau"), tate("a/art-nouveau")] },
+  { id: "memphis", cat: "movement", ja: "メンフィス", en: "Memphis Design", era: "1980〜87年・イタリア（ミラノ）",
+    def: "エットレ・ソットサスが始めたイタリアのデザイン集団と、そのポストモダンな作風を指します。",
+    features: ["カラフルで抽象的な装飾", "非対称な形", "テラゾー（石の粒）などの模様"],
+    logo: "○", logoWhy: "幾何学形は小さくても残ります。色が増えやすいので「3色まで」と添えます。",
+    example: "メンフィス・デザイン風に、3色だけで、ジグザグと丸と三角を散らした背景に \"GEG\" の文字",
+    sources: [en("Memphis_Group")] },
+  { id: "minimal", cat: "movement", ja: "ミニマリズム", en: "Minimalism / minimalist", era: "1960年代・アメリカ",
+    def: "飾りを必要最小限まで省き、簡潔な形で表すスタイルです。",
+    features: ["装飾を切り詰める", "シンプルな形", "正方形・長方形などの単純な幾何学形"],
+    logo: "◎", logoWhy: "要素が少なく、小さくしても残ります。",
+    example: "ミニマルなデザインで、白地に1色だけ。北海道の形を1本の線で表した正方形のロゴ",
+    g: "Gemini API のロゴの例", sources: [ja("ミニマリズム"), en("Minimalism"), tate("m/minimalism")] },
+  { id: "brutalism", cat: "movement", ja: "ブルータリズム", en: "Brutalism", era: "1950〜60年代・イギリス",
+    def: "戦後のイギリスで生まれた建築様式です。コンクリートなどの素材や構造をむき出しにして、質感を見せます。",
+    features: ["塗装しない打放しコンクリート", "角ばった幾何学形", "ほぼ単色"],
+    logo: "△", logoWhy: "量感と質感が持ち味で、小さな平面のマークには向きにくいです。",
+    example: "ブルータリズム建築のような打放しコンクリートの質感で、角ばった建物の形をした北海道のオブジェ",
+    sources: [ja("ブルータリズム"), en("Brutalist_architecture"), tate("b/brutalism")] },
+  { id: "popart", cat: "movement", ja: "ポップアート", en: "Pop art", era: "1950〜60年代・イギリスとアメリカ",
+    def: "広告・漫画・包装など、大衆文化の図像を美術に取り込んだ芸術運動です。",
+    features: ["太い輪郭線", "鮮やかな色", "網点（ベンデイ・ドット）"],
+    logo: "○", logoWhy: "太い線と原色はバッジ向きです。網点は小さくすると潰れます。",
+    example: "ポップアート風に、黄・赤・黒の3色で、太い輪郭線のヒグマの顔",
+    g: "Vertex AI（Imagen）のガイド", sources: [ja("ポップアート"), en("Pop_art"), tate("p/pop-art")] },
+  { id: "constructivism", cat: "movement", ja: "構成主義", en: "Constructivism", era: "1915年ごろ・ロシア",
+    def: "ロシアで始まった、抽象的で厳格な芸術運動です。装飾を退け、ポスターなど社会のための表現に使われました。",
+    features: ["抽象的で簡素", "装飾を拒む", "ポスターやフォトモンタージュ"],
+    logo: "○", logoWhy: "単純な図形と太い文字で組めます。",
+    example: "ロシア構成主義のポスター風に、斜めの帯と円で構成した \"GEG\" のロゴ。赤・黒・白",
+    sources: [ja("ロシア構成主義"), en("Constructivism_(art)"), tate("c/constructivism")] },
+  { id: "midcentury", cat: "movement", ja: "ミッドセンチュリー・モダン", en: "Mid-century modern", era: "1945〜70年ごろ・北米ほか",
+    def: "20世紀半ばに流行した、すっきりした線と装飾の少なさが特徴のデザイン様式です。",
+    features: ["清潔で単純な線", "装飾が少ない", "家具・製品・グラフィックに及ぶ"],
+    logo: "○", logoWhy: "単純な形が多いです。言葉だけでは色が決まらないので、色を添えます。",
+    example: "ミッドセンチュリー・モダン風に、単純な線と、からし色・深緑・クリーム色の3色で描いたヒグマ",
+    sources: [en("Mid-century_modern")] },
+  { id: "y2k", cat: "movement", ja: "Y2K", en: "Y2K aesthetic", era: "1990年代後半〜2000年代初め",
+    def: "世紀の変わり目ごろの製品やファッションをもとにした、インターネット発の美学です。",
+    features: ["銀色・メタリックの光沢", "ライム・オレンジ・ピンクなどの明るい色", "当時のパソコン画面の雰囲気"],
+    logo: "△", logoWhy: "金属の光沢や反射が持ち味で、3色の印刷には向きにくいです。",
+    example: "Y2K風に、銀色のクロームと蛍光ピンクの2色で、丸みのある立体的な \"GEG\"",
+    sources: [ja("Y2K_(美学)"), en("Y2K_aesthetic")] },
+  { id: "vaporwave", cat: "movement", ja: "ヴェイパーウェイヴ", en: "Vaporwave", era: "2010年代初め・インターネット",
+    def: "ネットから生まれた音楽ジャンル・美学です。過去の消費文化への郷愁や皮肉を帯びます。",
+    features: ["90年代のウェブデザインとグリッチ", "古代ギリシャ・ローマ風の彫刻", "3Dの物体やメンフィスの幾何学形"],
+    logo: "△", logoWhy: "要素が多く、小さいサイズ・3色に向きません。",
+    example: "ヴェイパーウェイヴ風に、古代彫刻の胸像と90年代のパソコンの窓を組み合わせたポスター",
+    sources: [ja("ヴェイパーウェイヴ"), en("Vaporwave")] },
+
+  /* ---- 画面のスタイル ---- */
+  { id: "flat", cat: "screen", ja: "フラットデザイン", en: "flat design", era: "2012年ごろから",
+    def: "影・グラデーション・質感をほとんど使わず、単純な形と平らな色で表すデザインです。",
+    features: ["立体表現を最小限に", "単純な図形", "べた塗りの色"],
+    logo: "◎", logoWhy: "べた塗りで3色に収めやすいです。",
+    example: "フラットデザインで、白地に青・白・橙の3色。雪の結晶と北海道の形を組み合わせた正方形のロゴ",
+    sources: [ja("フラットデザイン"), en("Flat_design"), { label: "NN/g", url: "https://www.nngroup.com/articles/flat-design/" }] },
+  { id: "material", cat: "screen", ja: "マテリアルデザイン", en: "Material Design", era: "2014年・Google",
+    def: "Google が2014年に発表した画面のデザイン言語です。紙のような素材のたとえで、一貫した画面をつくります。",
+    features: ["グリッドに基づく配置", "光と影による奥行き", "動き（アニメーション）"],
+    logo: "△", logoWhy: "画面の部品の様式で、ロゴの型ではありません。Google らしさが出るので、今回のロゴには使いません。",
+    example: "マテリアルデザイン風に、影つきで重なった色紙のカードのアイコン",
+    sources: [ja("マテリアルデザイン"), en("Material_Design"), { label: "Material Design", url: "https://m3.material.io/" }] },
+  { id: "skeuo", cat: "screen", ja: "スキューモーフィズム", en: "skeuomorphism", era: "2000年代のウェブで多用",
+    def: "実物の見た目を画面に残して、使い方を分かりやすくするデザインです。紙のカレンダーをまねたアプリなどがその例です。",
+    features: ["実物の質感をまねる", "影・グラデーション・質感を使う", "直感的に分かる"],
+    logo: "△", logoWhy: "質感と影が多く、小さいサイズ・3色に向きません。",
+    example: "スキューモーフィズムで、革の手帳と金属の留め具を本物らしく描いたアイコン",
+    sources: [ja("スキューモーフィズム"), en("Skeuomorph"), { label: "NN/g", url: "https://www.nngroup.com/articles/skeuomorphism/" }] },
+  { id: "neumorphism", cat: "screen", ja: "ニューモーフィズム", en: "neumorphism / soft UI", era: "2019年に命名",
+    def: "部品が背景から盛り上がったり、へこんだりして見える、やわらかく明るい画面のデザインです。",
+    features: ["背景から浮き出る・へこむ", "淡い影", "スキューモーフィズムとフラットの中間"],
+    logo: "△", logoWhy: "淡い影で形をつくるので、小さくすると見えなくなります。",
+    example: "ニューモーフィズムで、薄いグレーの背景から丸いボタンが盛り上がっているアイコン",
+    sources: [en("Neumorphism"), { label: "IxDF", url: "https://www.interaction-design.org/literature/topics/neumorphism" }] },
+  { id: "glass", cat: "screen", ja: "グラスモーフィズム", en: "glassmorphism",
+    def: "鮮やかな色の上に、すりガラスのような半透明の層を重ねるデザインです。",
+    features: ["半透明のぼかし", "角丸と細い縁取り", "重ねて奥行きを出す"],
+    logo: "△", logoWhy: "透けとぼかしは、印刷や缶バッジ・3色に向きません。",
+    example: "グラスモーフィズムで、すりガラス風の半透明の板に雪の結晶を載せたアイコン",
+    sources: [en("Glassmorphism"), { label: "NN/g", url: "https://www.nngroup.com/articles/glassmorphism/" }] },
+
+  /* ---- 技法・画材 ---- */
+  { id: "watercolor", cat: "technique", ja: "水彩", en: "watercolor painting",
+    def: "顔料を水に溶かした絵の具で描く技法です。",
+    features: ["透明感", "紙の上でにじむ", "紙に描くのが一般的"],
+    logo: "△", logoWhy: "にじみと濃淡は3色・小さいサイズに向きません。1色の筆づかいなら使えます。",
+    example: "水彩画風に、にじむ青と白で描いた北海道の雪景色",
+    g: "Gemini アプリ ヘルプ", sources: [ja("水彩"), en("Watercolor_painting"), tate("w/watercolour")] },
+  { id: "oil", cat: "technique", ja: "油彩", en: "oil painting",
+    def: "油で練った絵の具で描く技法です。",
+    features: ["豊かで濃い色", "塗り重ね", "明暗の幅が広い"],
+    logo: "△", logoWhy: "厚塗りの筆跡と階調が、ロゴの条件に合いません。",
+    example: "油絵風の厚塗りで、夕日に染まる大雪山",
+    sources: [ja("油彩"), en("Oil_painting"), tate("o/oil-paint")] },
+  { id: "pencil", cat: "technique", ja: "鉛筆スケッチ", en: "pencil sketch",
+    def: "鉛筆で素早く描く手描きの絵です。完成作を意図しないことが多いです。",
+    features: ["線の重なりと陰影", "モノクロ寄り", "下書きのようなラフさ"],
+    logo: "△", logoWhy: "細い線と陰影は、小さくすると潰れます。",
+    example: "鉛筆スケッチ風に、ヒグマの横顔を白い紙に描いて",
+    g: "Gemini API・Vertex AI（Imagen）", sources: [ja("スケッチ"), en("Sketch_(drawing)")] },
+  { id: "lineart", cat: "technique", ja: "線画", en: "line art",
+    def: "無地の背景に、はっきりした線だけで描いた絵です。",
+    features: ["線だけで表す", "たいてい1色", "無地の背景"],
+    logo: "◎", logoWhy: "1色・線だけで、小さくても分かります。線は太めにと添えます。",
+    example: "線画で、ヒグマの顔を一定の太い線の1色だけで描いた正方形のロゴ。背景は白",
+    sources: [en("Line_art")] },
+  { id: "vector", cat: "technique", ja: "ベクターイラスト", en: "vector illustration",
+    def: "点・線・曲線などの図形の組み合わせでつくる画像です。拡大しても荒れません。",
+    features: ["図形の組み合わせ", "解像度に左右されない", "拡大しても荒れない"],
+    logo: "◎", logoWhy: "拡大縮小に強く、印刷用に直しやすい見た目です。ただし Gemini が出すのは PNG の画像（ベクター風）です。",
+    example: "ベクターイラスト風に、くっきりした輪郭と平らな色面で、雪の結晶を載せた北海道の形。3色まで",
+    sources: [ja("ベクター画像"), en("Vector_graphics")] },
+  { id: "pixel", cat: "technique", ja: "ピクセルアート（ドット絵）", en: "pixel art",
+    def: "画素（ドット）だけで描くデジタルの絵です。昔のゲームの画面と結びつきます。",
+    features: ["四角いドットが見える", "色数が少ない", "ドット1つに1色"],
+    logo: "○", logoWhy: "色数が少なく3色に収めやすいです。小さくするとドットが潰れます。",
+    example: "ピクセルアート（16ビット風）で、3色だけ使ったヒグマの顔のスタッフロゴ",
+    sources: [ja("ドット絵"), en("Pixel_art")] },
+  { id: "lowpoly", cat: "technique", ja: "ローポリ", en: "low poly",
+    def: "少ない数の多角形でつくる立体、またはその見た目のミニマルなスタイルです。",
+    features: ["三角形などの平らな面", "少ない頂点", "写実的でない"],
+    logo: "○", logoWhy: "面の色を3色に絞れば成り立ちます。面が細かいと小さいサイズに弱いです。",
+    example: "ローポリ風に、三角形の面だけでできたヒグマの顔。色は3色まで",
+    sources: [en("Low_poly")] },
+  { id: "papercut", cat: "technique", ja: "切り絵", en: "paper cut art",
+    def: "紙を切り抜いて、人や動物などを表した作品です。",
+    features: ["白と黒のコントラスト", "切り口のくっきりした形", "輪郭がつながっている"],
+    logo: "◎", logoWhy: "白黒2色の面で成り立ち、小さくても形が残ります。",
+    example: "切り絵風に、黒一色で、雪の結晶の中に北海道の形を切り抜いたデザイン",
+    sources: [ja("切り絵"), en("Papercutting")] },
+  { id: "papercraft", cat: "technique", ja: "ペーパークラフト", en: "papercraft / origami style",
+    def: "厚めの紙で組み立てる模型です。折り紙も含みます。",
+    features: ["紙の部品を組み立てる", "色や形の違う部品", "立体"],
+    logo: "△", logoWhy: "立体と影が前提で、平面のロゴにしにくいです。",
+    example: "ペーパークラフト風に、色紙を重ねて作った立体の雪だるま。真正面から撮った写真",
+    g: "Vertex AI（Imagen）のガイド（origami style）", sources: [ja("ペーパークラフト"), en("Paper_model")] },
+  { id: "clay", cat: "technique", ja: "クレイ（粘土）", en: "claymation",
+    def: "粘土でつくった人形をコマ撮りするアニメーションの技法です。",
+    features: ["粘土でつくった立体", "コマ撮りアニメ由来"],
+    logo: "△", logoWhy: "立体の表現で、平面の3色ロゴにはしにくいです。マスコットなら使えます。",
+    example: "粘土（クレイアニメ）風の、丸くてぷっくりしたヒグマのキャラクター",
+    g: "Gemini API", sources: [ja("クレイアニメ"), en("Claymation")] },
+  { id: "felt", cat: "technique", ja: "フェルト", en: "felt craft",
+    def: "動物の毛を圧縮してシート状にした布です。",
+    features: ["毛の繊維を絡めて圧縮した布"],
+    logo: "△", logoWhy: "質感が主役で、小さな平面ロゴには出にくいです。色フェルトを貼った単純な形なら使えます。",
+    example: "色フェルトを切って縫い合わせたようなクラフト風の、ヒグマのワッペン",
+    sources: [ja("フェルト"), en("Felt")] },
+  { id: "embroidery", cat: "technique", ja: "刺繍", en: "embroidery",
+    def: "布などに、針と糸で模様や文字を縫いつける技術です。",
+    features: ["糸の縫い目（サテンステッチなど）", "ワッペンに使われる", "布や革が土台"],
+    logo: "○", logoWhy: "ワッペンなど布のグッズと相性がよいです。細い線と小さい文字は潰れやすいです。",
+    example: "刺繍ワッペン風に、サテンステッチで縁取った丸い北海道の形のエンブレム",
+    sources: [ja("刺繍"), en("Embroidery")] },
+  { id: "stainedglass", cat: "technique", ja: "ステンドグラス", en: "stained glass",
+    def: "色ガラスの小片を鉛の枠でつないで、絵や模様を表したものです。",
+    features: ["色ガラスの面", "鉛の線で区切る", "教会や洋館の窓"],
+    logo: "○", logoWhy: "線で区切った色面は版にしやすいです。色は3色にと添えます。",
+    example: "ステンドグラス風に、太い黒い線で区切った青・白・黄の面で雪の結晶を描いて",
+    sources: [ja("ステンドグラス"), en("Stained_glass")] },
+  { id: "riso", cat: "technique", ja: "リソグラフ", en: "risograph print",
+    def: "理想科学工業の孔版印刷機、またその印刷です。インクを1色ずつ替えて刷ります。",
+    features: ["特色（スポットカラー）を1色ずつ刷る", "色を重ねて刷る", "大豆油インク"],
+    logo: "○", logoWhy: "色数を限った重ね刷りは「3色まで」と相性がよいです。",
+    example: "リソグラフ印刷風に、蛍光ピンクと青の2色を重ねた、ざらっとした質感の雪だるま",
+    sources: [ja("リソグラフ"), en("Risograph")] },
+  { id: "halftone", cat: "technique", ja: "ハーフトーン（網点）", en: "halftone",
+    def: "大きさや間隔を変えた点（網点）で、濃淡を表す印刷の技法です。",
+    features: ["点の集まり", "点の大小で濃淡", "ポップアートの網点につながる"],
+    logo: "△", logoWhy: "点が細かいと、小さくしたとき潰れます。大きな点の1色なら使えます。",
+    example: "ハーフトーン（網点）の大きなドットで陰影をつけたヒグマの顔。2色刷り",
+    sources: [ja("網点"), en("Halftone")] },
+  { id: "woodcut", cat: "technique", ja: "木版画", en: "woodblock print / woodcut",
+    def: "木の板を彫り、彫り残した部分にインクをつけて刷る版画です。",
+    features: ["彫り残した部分だけが刷られる", "木目に沿って彫る", "東アジアで広く使われた"],
+    logo: "○", logoWhy: "白黒の面と彫り線は1色の版に向きます。細かい彫りは潰れます。",
+    example: "木版画風に、黒一色の太い彫り跡で描いたヒグマ",
+    sources: [ja("木版画"), en("Woodblock_printing"), tate("w/woodcut")] },
+
+  /* ---- 立体・構図 ---- */
+  { id: "isometric", cat: "view", ja: "アイソメトリック", en: "isometric illustration",
+    def: "3つの軸が120°で交わるように描く図法です。立体を、奥行きで小さくせずに平面に表します。",
+    features: ["3つの軸が120°（左右の線は斜め30°）", "奥の物も小さくならない", "ゲームのマップなどで使われる"],
+    logo: "○", logoWhy: "立体のロゴに向きます。面の明暗で色が増えるので「3色まで」と添えます。",
+    example: "アイソメトリックのイラストで、雪の結晶の形をした小さな島。正方形、白い背景、3色まで",
+    g: "Gemini API・Vertex AI（Imagen）", sources: [ja("等角図"), en("Isometric_projection")] },
+  { id: "render3d", cat: "view", ja: "3Dレンダー", en: "3D render",
+    def: "コンピュータで立体のモデルから画像をつくること、またその画像です。",
+    features: ["質感のある立体", "やわらかい光と影", "素材の質感（つや・材質）"],
+    logo: "△", logoWhy: "陰影と質感が多く、3色・小さいサイズに向きません。単純な形でつや消しなら使えます。",
+    example: "3Dレンダー風に、つやのある丸い雪だるまを、やわらかい光で",
+    g: "Gemini API", sources: [ja("レンダリング_(コンピュータ)"), en("Rendering_(computer_graphics)"), GAPI] },
+  { id: "knolling", cat: "view", ja: "ノーリング／フラットレイ", en: "knolling / flat lay", era: "1987年に生まれた言葉",
+    def: "物を直角にそろえて並べ、真上から撮る見せ方です。",
+    features: ["真上からの視点", "直角にそろえた並べ方", "整理された見た目"],
+    logo: "△", logoWhy: "写真の構図で、ロゴの型ではありません。",
+    example: "ノーリング（直角にそろえて真上から撮った）形式で、雪だるまの材料を並べた写真",
+    sources: [ja("ノーリング"), { label: "Adobe", url: "https://www.adobe.com/creativecloud/photography/type/flat-lay-photography.html" }] },
+  { id: "birdseye", cat: "view", ja: "俯瞰（鳥瞰）", en: "bird's-eye view / aerial view",
+    def: "高い位置から見下ろした眺めです。地図や絵に使います。",
+    features: ["真上〜斜め上から見下ろす", "広い範囲が見える", "地図や間取り図に使う"],
+    logo: "△", logoWhy: "景色や場面向きで、ロゴの型ではありません。",
+    example: "俯瞰（真上から）で見た、雪の積もった北海道の街並みのイラスト",
+    g: "Vertex AI（Imagen）のガイド（aerial）", sources: [ja("鳥瞰図"), ja("俯瞰景"), en("Bird%27s-eye_view")] },
+  { id: "negative", cat: "view", ja: "ネガティブスペース", en: "negative space",
+    def: "形のまわりや間にある空いた空間（余白）です。余白そのものが別の形に見えることもあります。",
+    features: ["余白が形をつくる", "構図の大事な要素", "文字を載せる場所になる"],
+    logo: "◎", logoWhy: "余白に別の形が見える型は、少ない色・小さいサイズで効きます。1回では出にくいので、直しながら。",
+    example: "ネガティブスペースを使って、白い余白が雪の結晶に見える北海道の形のロゴ",
+    g: "Gemini API", sources: [ja("余白"), en("Negative_space")] },
+
+  /* ---- ロゴの型 ---- */
+  { id: "emblem", cat: "logo", ja: "エンブレム／バッジ", en: "emblem logo / badge logo",
+    def: "円や盾の枠の中に、絵と文字をまとめたしるしです。",
+    features: ["円や盾の枠", "絵と文字の組み合わせ", "缶バッジ・ワッペンになりやすい"],
+    logo: "◎", logoWhy: "正方形や円に収まり、グッズに載せやすいです。文字を詰め込むと潰れます。",
+    example: "円形のバッジ型エンブレムで、中央に北海道の形、上に \"GEG\"、下に \"STAFF\"。3色まで",
+    sources: [ja("エンブレム"), ja("バッジ"), en("Emblem"), en("Badge")] },
+  { id: "monogram", cat: "logo", ja: "モノグラム", en: "monogram logo",
+    def: "2つ以上の文字を重ねたり組み合わせたりして、1つの記号にしたものです。",
+    features: ["頭文字の組み合わせ", "文字が重なる・つながる", "刺繍にも使う"],
+    logo: "◎", logoWhy: "文字が短く、正方形に収まります。",
+    example: "\"GEG\" の3文字を組み合わせたモノグラム。正方形、2色",
+    sources: [ja("モノグラム"), en("Monogram")] },
+  { id: "wordmark", cat: "logo", ja: "ワードマーク／レターマーク", en: "wordmark / lettermark",
+    def: "名前を文字だけで表したロゴです。頭文字だけのものはレターマークと呼ばれます。",
+    features: ["文字だけで絵がない", "書体の個性が決め手", "頭文字だけならレターマーク"],
+    logo: "○", logoWhy: "短ければ強いです（\"GEG\" なら◎）。長い名前は小さくすると読めません。",
+    example: "\"GEG\" の3文字だけのワードマーク。太い丸ゴシック、1色",
+    sources: [ja("ロゴタイプ"), en("Wordmark")] },
+  { id: "mascot", cat: "logo", ja: "マスコットロゴ", en: "mascot logo",
+    def: "学校・チーム・団体などを表す、人や動物のキャラクターのロゴです。",
+    features: ["動物などのキャラクター", "名前や愛称と結びつく", "グッズに使われる"],
+    logo: "○", logoWhy: "色と線を絞れば成り立ちます。毛並みや陰影は小さくすると潰れます。",
+    example: "ヒグマのマスコットロゴ。太い輪郭線、色は茶・白・黒の3色、正方形",
+    sources: [ja("マスコット"), en("Mascot")] },
+  { id: "lineicon", cat: "logo", ja: "ラインアイコン", en: "line icon / pictogram",
+    def: "物の形を簡単な線の絵柄にして、意味を伝える記号です。",
+    features: ["単純な図記号", "形に似せて意味を伝える", "線だけ・1色"],
+    logo: "◎", logoWhy: "1色・線だけで、小さくても読めます。",
+    example: "ラインアイコン風に、一定の太さの線だけで描いたヒグマ。1色、白い背景、正方形",
+    g: "Gemini API（icon）", sources: [ja("ピクトグラム"), ja("アイコン"), en("Pictogram")] },
+
+  /* ---- 日本の表現 ---- */
+  { id: "ukiyoe", cat: "japan", ja: "浮世絵", en: "ukiyo-e / Japanese woodblock print", era: "江戸時代",
+    def: "江戸時代に栄えた日本の絵画です。多色刷りの木版画（錦絵）がよく知られています。",
+    features: ["多色刷りの木版画（錦絵）", "美人・役者・風景・花鳥などの題材", "風景画もよく知られる"],
+    logo: "○", logoWhy: "波や山など題材を1つに絞り、版画風の平らな色面にすれば成り立ちます。",
+    example: "浮世絵の木版画風に、大きくうねる波の上に雪だるま。藍・白・赤の3色",
+    sources: [ja("浮世絵"), en("Ukiyo-e")] },
+  { id: "sumie", cat: "japan", ja: "墨絵・水墨画", en: "sumi-e / ink wash painting", era: "唐代の中国で成立・室町時代に日本へ",
+    def: "墨の濃淡とぼかしで描く絵です。",
+    features: ["黒の濃淡だけ", "ぼかし", "筆づかいを重んじる"],
+    logo: "○", logoWhy: "墨の1色で成り立ちます。かすれは小さいと読みにくいので、太い一筆で。",
+    example: "水墨画風に、墨の濃淡だけで、雪をかぶった山と一羽の鶴",
+    sources: [ja("水墨画"), en("Ink_wash_painting")] },
+  { id: "kamon", cat: "japan", ja: "家紋風", en: "kamon (Japanese family crest)",
+    def: "家や団体を見分けるために使う、日本の紋章です。",
+    features: ["見分けるための紋章", "描きやすい単純な図案", "丸で囲んだ形が多い"],
+    logo: "◎", logoWhy: "1色で円に収まる単純な図案で、小さくても分かります。実在の家の紋には似せないようにします。",
+    example: "家紋風に、丸で囲んだ1色の図案で、雪の結晶とヒグマを組み合わせたスタッフ紋",
+    sources: [ja("家紋"), en("Mon_(emblem)")] },
+  { id: "wagara", cat: "japan", ja: "和柄（市松・青海波・麻の葉）", en: "ichimatsu / seigaiha / asanoha pattern",
+    def: "日本の伝統的な文様です。市松は二色の四角の格子、青海波は重ねた半円の波、麻の葉は六角形が基本の形です。",
+    features: ["市松：二色の四角を交互に並べる", "青海波：半円を重ねた波", "麻の葉：正六角形が基本"],
+    logo: "○", logoWhy: "背景や帯なら◎。主役にすると単調なので、中央に別のモチーフを置きます。",
+    example: "市松模様の背景に、白抜きの雪の結晶。藍と白の2色",
+    sources: [ja("市松模様"), ja("青海波"), ja("麻の葉文様")] },
+  { id: "yuru", cat: "japan", ja: "ゆるキャラ風", en: "yuru-chara (Japanese mascot)",
+    def: "地域やイベントのPRに使う、かわいく素朴なマスコットキャラクターです。",
+    features: ["かわいく素朴", "地域の産物や文化をモチーフにする", "「ゆるいマスコットキャラクター」の略"],
+    logo: "○", logoWhy: "単純で丸い形は、小さくても分かります。",
+    example: "ゆるキャラ風に、丸くて素朴なヒグマのマスコット。目は点、色は3色まで",
+    sources: [ja("ゆるキャラ"), en("Yuru-kyara")] },
+  { id: "showa", cat: "japan", ja: "昭和レトロ", en: "Showa retro", era: "昭和（1926〜89年）",
+    def: "昭和の時代をなつかしむ見た目です。",
+    features: ["昭和30年代への郷愁が中心とされる"],
+    logo: "○", logoWhy: "言葉だけでは見た目が定まらないので、色・書体・モチーフを添えます。",
+    example: "昭和レトロ風の、商店街の看板のような手描き文字の \"STAFF\"。赤・クリーム・紺の3色",
+    sources: [ja("昭和文化"), en("Sh%C5%8Dwa_nostalgia")] },
+  { id: "kawaii", cat: "japan", ja: "カワイイ", en: "kawaii style", era: "1970年代から",
+    def: "かわいらしさ・無邪気さ・単純さを大切にする、日本の文化です。",
+    features: ["やわらかい色・パステル", "丸い形", "大きな目と小さな口"],
+    logo: "○", logoWhy: "丸い形と少ない線は、小さくしても強いです。パステルは印刷で薄く出ます。",
+    example: "kawaii スタイルのステッカー風に、丸いヒグマ。太い輪郭線、2色、白い背景",
+    g: "Gemini API・Developers Blog（kawaii-style）", sources: [en("Kawaii")] },
+
+  /* ---- 色・光 ---- */
+  { id: "pastel", cat: "color", ja: "パステル", en: "pastel colors",
+    def: "白を混ぜたような、淡い色の系統です。",
+    features: ["明るく淡い", "彩度が低め", "桜色・藤色など"],
+    logo: "△", logoWhy: "淡い色は、小さいサイズや印刷で見えにくいです。",
+    example: "パステルカラー（淡いピンクと水色）で、丸いヒグマ",
+    sources: [ja("パステルカラー"), en("Pastel_(color)")] },
+  { id: "mono", cat: "color", ja: "モノクロ", en: "monochrome",
+    def: "1色（とその明暗）だけでつくる配色です。",
+    features: ["1色の濃淡", "灰色だけならグレースケール"],
+    logo: "◎", logoWhy: "1色で印刷しやすいです。",
+    example: "モノクロで、黒一色の線で描いたヒグマ",
+    g: "Vertex AI（Imagen）のガイド", sources: [ja("モノクローム"), en("Monochrome")] },
+  { id: "duotone", cat: "color", ja: "デュオトーン", en: "duotone",
+    def: "2色を重ねて画像を表す手法です。黒と別の1色の組み合わせが一般的です。",
+    features: ["2色の重ね合わせ", "黒＋青・黄・茶などが多い"],
+    logo: "◎", logoWhy: "2色なので「3色まで」を満たせます。色の名前を2つ書きます。",
+    example: "デュオトーン（紺と黄色の2色）で、雪景色のイラスト",
+    g: "Vertex AI（Imagen）のガイド", sources: [en("Duotone")] },
+  { id: "neon", cat: "color", ja: "ネオン", en: "neon colors",
+    def: "ネオンサインの色、または蛍光色のことです。",
+    features: ["ネオンサインの色", "蛍光色"],
+    logo: "△", logoWhy: "光って見える表現は、3色の印刷にしにくいです。",
+    example: "ネオンサイン風に、黒い背景に光る青とピンクの線でヒグマ",
+    sources: [ja("ネオンカラー")] },
+  { id: "earth", cat: "color", ja: "アースカラー", en: "earth tone",
+    def: "茶・緑・灰色など、自然の素材や風景に近い色の配色です。",
+    features: ["茶・深緑・灰色", "落ち着いた色合い", "1970年代の環境運動の時期に人気"],
+    logo: "○", logoWhy: "3色に絞りやすいです。",
+    example: "アースカラー（茶・深緑・生成り）の3色で、大雪山のシンプルなマーク",
+    sources: [ja("アースカラー"), en("Earth_tone")] },
+];
+
+/* 見本の画像。作る順（ロゴ向きを優先し、見た目と種類がばらけるように）。
+   画像ができたら SAMPLE_IMG に「id: 'samples/id.jpg'」を足す（tools/make_samples.py が書き換える） */
+const SAMPLE_ORDER = ["flat", "lineart", "kamon", "bauhaus", "emblem", "isometric",
+  "papercut", "negative", "popart", "ukiyoe", "swiss", "watercolor"];
+const SAMPLE_IMG = { artdeco: "samples/artdeco.jpg", bauhaus: "samples/bauhaus.jpg", birdseye: "samples/birdseye.jpg", brutalism: "samples/brutalism.jpg", clay: "samples/clay.jpg", constructivism: "samples/constructivism.jpg", duotone: "samples/duotone.jpg", earth: "samples/earth.jpg", emblem: "samples/emblem.jpg", embroidery: "samples/embroidery.jpg", felt: "samples/felt.jpg", flat: "samples/flat.jpg", glass: "samples/glass.jpg", halftone: "samples/halftone.jpg", isometric: "samples/isometric.jpg", kamon: "samples/kamon.jpg", kawaii: "samples/kawaii.jpg", knolling: "samples/knolling.jpg", lineart: "samples/lineart.jpg", lineicon: "samples/lineicon.jpg", lowpoly: "samples/lowpoly.jpg", mascot: "samples/mascot.jpg", material: "samples/material.jpg", memphis: "samples/memphis.jpg", midcentury: "samples/midcentury.jpg", minimal: "samples/minimal.jpg", mono: "samples/mono.jpg", monogram: "samples/monogram.jpg", negative: "samples/negative.jpg", neon: "samples/neon.jpg", neumorphism: "samples/neumorphism.jpg", nouveau: "samples/nouveau.jpg", oil: "samples/oil.jpg", papercraft: "samples/papercraft.jpg", papercut: "samples/papercut.jpg", pastel: "samples/pastel.jpg", pencil: "samples/pencil.jpg", pixel: "samples/pixel.jpg", popart: "samples/popart.jpg", render3d: "samples/render3d.jpg", riso: "samples/riso.jpg", showa: "samples/showa.jpg", skeuo: "samples/skeuo.jpg", stainedglass: "samples/stainedglass.jpg", sumie: "samples/sumie.jpg", swiss: "samples/swiss.jpg", ukiyoe: "samples/ukiyoe.jpg", vaporwave: "samples/vaporwave.jpg", vector: "samples/vector.jpg", wagara: "samples/wagara.jpg", watercolor: "samples/watercolor.jpg", woodcut: "samples/woodcut.jpg", wordmark: "samples/wordmark.jpg", y2k: "samples/y2k.jpg", yuru: "samples/yuru.jpg" };
+/* 「〇〇（英語）のスタイルで、」。名前が「スタイル」「風」で終わる言葉は「〇〇（英語）で、」 */
+function styleLead(w) {
+  return w.ja + "（" + w.en + "）" + (/(スタイル|風)$/.test(w.ja) ? "で、" : "のスタイルで、");
+}
+/* 見本を作った頼み方（2026-10-25 に Gemini で55語とも、毎回新しいチャットで） */
+function samplePrompt(w) {
+  const fu = /風$/.test(w.ja) ? w.ja : w.ja + "風";
+  return "GEG ALL Hokkaido のロゴを作ります。" + fu + "で作成してください。正方形で作ってください。Googleの4色は使わないでください。";
+}
+
+const CATS = [
+  { key: "all", label: "すべて" },
+  { key: "movement", label: "様式・運動" },
+  { key: "screen", label: "画面のスタイル" },
+  { key: "technique", label: "技法・画材" },
+  { key: "view", label: "立体・構図" },
+  { key: "logo", label: "ロゴの型" },
+  { key: "japan", label: "日本の表現" },
+  { key: "color", label: "色・光" },
+];
+const catLabel = Object.fromEntries(CATS.map(c => [c.key, c.label]));
+const state = { cat: "all", q: "", logoOnly: false };
+const $ = (id) => document.getElementById(id);
+
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+/* ---- コピー（だめなら文字を選んだ状態にする） ---- */
+function copyText(text, statusEl, selectEl) {
+  const done = () => { if (statusEl) statusEl.textContent = "コピーしました"; };
+  const fallback = () => {
+    if (selectEl) {
+      const r = document.createRange(); r.selectNodeContents(selectEl);
+      const s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+    if (statusEl) statusEl.textContent = "選んだ状態にしました。Ctrl+C（⌘C）でコピーしてください";
+  };
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else { fallback(); }
+  } catch (e) { fallback(); }
+}
+
+/* ---- 組み立て ---- */
+function buildPrompt() {
+  const id = $("b-style").value;
+  const w = WORDS.find(x => x.id === id);
+  const subject = $("b-subject").value.trim();
+  const text = $("b-text").value.split("/").map(s => s.trim()).filter(Boolean);
+  const lines = [];
+  lines.push((w ? styleLead(w) : "") + "GEG All Hokkaido のスタッフ用ロゴを作ってください。");
+  if (subject) lines.push(subject + "をモチーフにします。");
+  const cond = [];
+  if ($("b-square").checked) cond.push("正方形、白い背景");
+  if ($("b-color").checked) cond.push("色は3色まで");
+  if ($("b-simple").checked) cond.push("小さくしても分かるシンプルな形");
+  if (cond.length) lines.push(cond.join("。") + "。");
+  if (text.length) lines.push("文字は " + text.map(t => "\"" + t + "\"").join(" と ") + " だけ。太く、読みやすく。");
+  if ($("b-google").checked) lines.push("Google のロゴや4色の配色は使わないでください。");
+  $("b-out").textContent = lines.join("\n");
+  $("b-copied").textContent = "";
+}
+function fillStyleSelect() {
+  const sel = $("b-style");
+  const opts = ['<option value="">（選ばない）</option>'];
+  CATS.filter(c => c.key !== "all").forEach(c => {
+    const ws = WORDS.filter(w => w.cat === c.key);
+    if (!ws.length) return;
+    opts.push('<optgroup label="' + esc(c.label) + '">' + ws.map(w => '<option value="' + esc(w.id) + '">' + esc(w.ja) + "</option>").join("") + "</optgroup>");
+  });
+  sel.innerHTML = opts.join("");
+  const first = WORDS.find(w => w.id === "isometric");
+  if (first) sel.value = first.id;
+}
+function useWord(id) {
+  $("b-style").value = id;
+  buildPrompt();
+  $("builder").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+}
+
+/* ---- 一覧 ---- */
+function renderTabs() {
+  $("tabs").innerHTML = CATS.map(c => {
+    const n = c.key === "all" ? WORDS.length : WORDS.filter(w => w.cat === c.key).length;
+    if (!n && c.key !== "all") return "";
+    return '<button type="button" role="tab" data-cat="' + c.key + '" aria-selected="' + (state.cat === c.key) + '">' + esc(c.label) + '<span class="n">' + n + "</span></button>";
+  }).join("");
+}
+function matches(w) {
+  if (state.cat !== "all" && w.cat !== state.cat) return false;
+  if (state.logoOnly && w.logo !== "◎") return false;
+  if (!state.q) return true;
+  const hay = [w.ja, w.en, w.def, (w.features || []).join(" "), w.example].join(" ").toLowerCase();
+  return hay.indexOf(state.q.toLowerCase()) >= 0;
+}
+function renderCards() {
+  const list = WORDS.filter(matches);
+  $("count").textContent = list.length + " 語";
+  if (!list.length) { $("cards").innerHTML = '<p class="empty">当てはまる言葉がありません。さがす言葉を短くするか、「すべて」に戻してください。</p>'; return; }
+  $("cards").innerHTML = list.map(w => {
+    const src = (w.sources || []).map(s => '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.label) + "</a>").join("・");
+    return '<article class="card">' +
+      '<div class="top"><span class="label cat">' + esc(catLabel[w.cat] || "") + "</span>" +
+      '<span class="fit" title="ロゴ向き">ロゴ ' + esc(w.logo) + "</span></div>" +
+      (SAMPLE_IMG[w.id] ? '<figure><div class="frame"><img src="' + esc(SAMPLE_IMG[w.id]) + '" alt="' + esc(w.ja) + 'の見本" loading="lazy"></div>' +
+        "<figcaption>見本（Gemini で作成）</figcaption></figure>" : "") +
+      "<h3>" + esc(w.ja) + "</h3>" +
+      '<p class="en">' + esc(w.en) + (w.era ? "　/　" + esc(w.era) : "") + "</p>" +
+      '<p class="def">' + esc(w.def) + "</p>" +
+      (w.features && w.features.length ? "<ul>" + w.features.map(f => "<li>" + esc(f) + "</li>").join("") + "</ul>" : "") +
+      (w.logoWhy ? '<p class="why">ロゴ ' + esc(w.logo) + "：" + esc(w.logoWhy) + "</p>" : "") +
+      (w.g ? '<p class="g">Google の説明の例にも登場：' + esc(w.g) + "</p>" : "") +
+      '<p class="ex" id="ex-' + esc(w.id) + '">' + esc(w.example) + "</p>" +
+      '<div class="btns"><button type="button" data-copy="' + esc(w.id) + '">例をコピー</button>' +
+      '<button type="button" data-use="' + esc(w.id) + '">組み立てる</button><span class="copied" id="c-' + esc(w.id) + '" aria-live="polite"></span></div>' +
+      (src ? '<p class="src">出典：' + src + "</p>" : "") +
+      "</article>";
+  }).join("");
+}
+
+/* ---- 見くらべ（見本の画像。まだ無い言葉は「準備中」の枠と、見本の頼み方のコピー） ---- */
+function renderTiles() {
+  $("tiles").innerHTML = SAMPLE_ORDER.map(id => {
+    const w = WORDS.find(x => x.id === id); if (!w) return "";
+    const img = SAMPLE_IMG[id];
+    return '<div class="tile">' +
+      '<div class="frame">' + (img ? '<img src="' + esc(img) + '" alt="' + esc(w.ja) + 'の見本" loading="lazy">' : '<span class="wait">準備中</span>') + "</div>" +
+      '<p class="name"><span>' + esc(w.ja) + '</span><span class="fit">ロゴ ' + esc(w.logo) + "</span></p>" +
+      '<p class="sr" id="sp-' + esc(id) + '" hidden>' + esc(samplePrompt(w)) + "</p>" +
+      '<div class="btns"><button type="button" data-sample="' + esc(id) + '">見本の頼み方をコピー</button>' +
+      '<button type="button" data-use="' + esc(id) + '">組み立てる</button></div>' +
+      '<span class="copied" id="sc-' + esc(id) + '" aria-live="polite"></span>' +
+      "</div>";
+  }).join("");
+}
+$("tiles").addEventListener("click", e => {
+  const s = e.target.closest("button[data-sample]");
+  if (s) {
+    const w = WORDS.find(x => x.id === s.dataset.sample);
+    const p = $("sp-" + w.id);
+    p.hidden = false;   // コピーできないときに選べるよう、文を出す
+    copyText(samplePrompt(w), $("sc-" + w.id), p);
+    return;
+  }
+  const u = e.target.closest("button[data-use]");
+  if (u) useWord(u.dataset.use);
+});
+
+$("tabs").addEventListener("click", e => {
+  const b = e.target.closest("button[data-cat]"); if (!b) return;
+  state.cat = b.dataset.cat; renderTabs(); renderCards();
+});
+$("q").addEventListener("input", e => { state.q = e.target.value.trim(); renderCards(); });
+$("logo-only").addEventListener("change", e => { state.logoOnly = e.target.checked; renderCards(); });
+$("cards").addEventListener("click", e => {
+  const c = e.target.closest("button[data-copy]");
+  if (c) { const w = WORDS.find(x => x.id === c.dataset.copy); copyText(w.example, $("c-" + w.id), $("ex-" + w.id)); return; }
+  const u = e.target.closest("button[data-use]");
+  if (u) useWord(u.dataset.use);
+});
+["b-style", "b-subject", "b-text", "b-square", "b-color", "b-simple", "b-google"].forEach(id => {
+  $(id).addEventListener("input", buildPrompt);
+  $(id).addEventListener("change", buildPrompt);
+});
+$("b-copy").addEventListener("click", () => copyText($("b-out").textContent, $("b-copied"), $("b-out")));
+
+fillStyleSelect();
+renderTiles();
+renderTabs();
+renderCards();
+buildPrompt();
+</script>
+</body>
+</html>
