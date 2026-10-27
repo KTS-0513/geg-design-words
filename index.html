@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="AI 画像生成で「〇〇風」と頼むためのデザインワード55語を、意味・ロゴ向きか・頼み方の例・見本の画像・出典つきで集めたページ（GEG All Hokkaido デザインコンペ 2026）">
+<meta name="description" content="AI 画像生成で「〇〇風」と頼むためのデザインワード100語を、意味・ロゴ向きか・頼み方の例・見本の画像・出典つきで集めたページ（GEG All Hokkaido デザインコンペ 2026）">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 body { margin: 0; }
 img { max-width: 100%; }
 [hidden] { display: none !important; }
 </style>
-<title>デザインワード図鑑</title>
+<title>デザインワード100選</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;800&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;700;900&display=swap">
@@ -195,8 +195,8 @@ footer.end { padding-block: 28px 48px; font-size: 13px; color: var(--mute); disp
   <section class="cover">
     <p class="label">GEG All Hokkaido · Design Competition · 2026.10.29</p>
     <p class="big" aria-hidden="true">DESIGN<br>WORDS</p>
-    <h1>デザインワード図鑑</h1>
-    <p class="lead">AI に絵を頼むとき、<strong>「〇〇風」のひとこと</strong>で方向が決まります。アイソメトリック、スイススタイル、家紋風……。ロゴづくりに使える言葉を、意味と頼み方の例つきで集めました。</p>
+    <h1>デザインワード100選</h1>
+    <p class="lead">AI に絵を頼むとき、<strong>「〇〇風」のひとこと</strong>で方向が決まります。アイソメトリック、スイススタイル、家紋風……。ロゴづくりに使える言葉を100語、意味と頼み方の例つきで集めました。</p>
   </section>
 
   <section class="row" id="formula">
@@ -218,7 +218,7 @@ footer.end { padding-block: 28px 48px; font-size: 13px; color: var(--mute); disp
   </section>
 
   <section class="row" id="compare">
-    <header><span class="label">Compare</span><h2>言葉だけ変えると</h2><p class="note">見本は、同じ頼み方で「〇〇風」の言葉だけを変えて、Gemini で作りました（毎回新しいチャット・2026年10月25日）。55語すべての見本は、下の一覧のカードにあります。</p></header>
+    <header><span class="label">Compare</span><h2>言葉だけ変えると</h2><p class="note">見本は、同じ頼み方で「〇〇風」の言葉だけを変えて、Gemini で作りました（毎回新しいチャット・2026年10月25日と27日）。100語すべての見本は、下の一覧のカードにあります。</p></header>
     <div>
       <p class="base"><span class="label">見本の頼み方</span>「GEG ALL Hokkaido のロゴを作ります。<b>〇〇風</b>で作成してください。正方形で作ってください。Googleの4色は使わないでください。」</p>
       <div class="tiles" id="tiles"></div>
@@ -284,7 +284,7 @@ footer.end { padding-block: 28px 48px; font-size: 13px; color: var(--mute); disp
   </section>
 
   <section class="row sources" id="sources">
-    <header><span class="label">Sources</span><h2>出典</h2><p class="note">2026年10月25日確認</p></header>
+    <header><span class="label">Sources</span><h2>出典</h2><p class="note">2026年10月25日・27日確認</p></header>
     <div>
       <ol>
         <li>Google Cloud「Prompt and image attribute guide」（Vertex AI・Imagen） <a href="https://cloud.google.com/vertex-ai/generative-ai/docs/image/img-gen-prompt-guide" target="_blank" rel="noopener">cloud.google.com</a></li>
@@ -386,6 +386,54 @@ const WORDS = [
     logo: "△", logoWhy: "要素が多く、小さいサイズ・3色に向きません。",
     example: "ヴェイパーウェイヴ風に、古代彫刻の胸像と90年代のパソコンの窓を組み合わせたポスター",
     sources: [ja("ヴェイパーウェイヴ"), en("Vaporwave")] },
+  { id: "destijl", cat: "movement", ja: "デ・ステイル", en: "De Stijl", era: "1917年〜・オランダ",
+    def: "1917年にオランダで創刊された雑誌と、そのグループの名前です。オランダ語で「様式」という意味です。",
+    features: ["水平・垂直の直線だけで組む", "正方形と長方形の面", "赤・黄・青の三原色と、白・黒・灰色"],
+    logo: "○", logoWhy: "直線と四角の面だけで組めます。三原色は Google の色に近いので、色は別に指定します。",
+    example: "デ・ステイル風に、黒い直線の格子と四角い色の面で組んだ \"GEG\" の文字。紺・からし色・白の3色",
+    sources: [ja("デ・ステイル"), en("De_Stijl"), tate("d/de-stijl")] },
+  { id: "nordic", cat: "movement", ja: "北欧デザイン", en: "Scandinavian design", era: "20世紀初め〜・1950年代に広まる",
+    def: "北欧の国々のデザインの総称です。単純さ・ミニマリズム・機能性が特徴とされます。",
+    features: ["単純で機能的な形", "家具・布・陶器・照明などの日用品", "1950年代に北欧5か国で花開いた"],
+    logo: "○", logoWhy: "単純な形と少ない色で組めます。モチーフを1つに絞ると、小さくしても分かります。",
+    example: "北欧デザイン風に、丸みのある単純な形の白樺の葉と雪の結晶。くすんだ青・生成り・黒の3色",
+    sources: [ja("北欧デザイン"), en("Scandinavian_design")] },
+  { id: "retrofuture", cat: "movement", ja: "レトロフューチャー", en: "retrofuturism",
+    def: "過去の人々が思い描いた未来像のことです。20世紀初めから中ごろに描かれた未来像をなつかしむ趣味も指します。",
+    features: ["昔の人が描いた「未来」", "過去と想像上の未来が混ざる", "スチームパンクなどの下位ジャンルがある"],
+    logo: "○", logoWhy: "ロケットなど、未来の乗り物や建物を1つに絞れば、マークにできます。",
+    example: "レトロフューチャー風に、1950年代の人が描いたような未来のロケットに乗るヒグマ。紺・クリーム・オレンジの3色",
+    sources: [ja("レトロフューチャー"), en("Retrofuturism")] },
+  { id: "steampunk", cat: "movement", ja: "スチームパンク", en: "steampunk",
+    def: "蒸気の力が主役のままの、もう一つの19世紀を描く SF の一種です。レトロフューチャーの下位ジャンルとされます。",
+    features: ["ヴィクトリア朝（19世紀）の雰囲気", "真鍮・鉄・木・革の素材", "歯車や蒸気の機械"],
+    logo: "△", logoWhy: "歯車や配管など細かい部品が多く、小さくすると潰れます。歯車1つに絞ると使えます。",
+    example: "スチームパンク風に、真鍮の歯車の中に雪の結晶を組み込んだ丸いエンブレム。茶・金・黒の3色",
+    sources: [ja("スチームパンク"), en("Steampunk")] },
+  { id: "opart", cat: "movement", ja: "オプアート", en: "op art", era: "1960年代",
+    def: "目の錯覚のしくみをもとに、特別な見え方を生むように計算された絵画のジャンルです。原則として抽象作品です。",
+    features: ["錯視で、動いて・ゆがんで見える", "抽象的な模様", "白黒の作品がよく知られる"],
+    logo: "○", logoWhy: "白黒の幾何学模様は1色で刷れます。細い縞は小さくすると潰れるので、太めに。",
+    example: "オプアート風に、白黒の太い縞がゆがんで、真ん中が膨らんで見える正方形のマーク。中央に \"GEG\"",
+    sources: [ja("オプ・アート"), en("Op_art"), tate("o/op-art")] },
+  { id: "psychedelic", cat: "movement", ja: "サイケデリック", en: "psychedelic art", era: "1960年代後半〜70年代初め",
+    def: "幻覚のような感覚に着想を得た、絵やグラフィックの表現です。とくに1960年代後半の対抗文化の芸術を指します。",
+    features: ["渦巻く極彩色・万華鏡のような模様", "ペイズリー柄", "ゆがめた手描きの文字（コンサートのポスターなど）"],
+    logo: "△", logoWhy: "色と模様が多く、小さくすると何か分からなくなります。文字の形だけ借りるなら使えます。",
+    example: "サイケデリック風に、うねるように曲がった手描きの文字で \"GEG\"。紫・オレンジ・クリームの3色",
+    sources: [ja("サイケデリック"), en("Psychedelic_art"), tate("p/psychedelic-art")] },
+  { id: "cubism", cat: "movement", ja: "キュビスム", en: "Cubism", era: "20世紀初め",
+    def: "20世紀初めの美術の大きな動きです。いろいろな角度から見た物の形を、1つの画面に収めました。",
+    features: ["いくつもの視点を1つの画面に", "形を小さな面に分ける", "幾何学的に単純にする"],
+    logo: "△", logoWhy: "面が多く、小さいと何か分かりにくいです。面の数を減らすよう頼みます。",
+    example: "キュビスム風に、正面と横から見た顔を組み合わせたヒグマを、少ない面で。茶・灰・生成りの3色",
+    sources: [ja("キュビスム"), en("Cubism"), tate("c/cubism")] },
+  { id: "cyberpunk", cat: "movement", ja: "サイバーパンク", en: "cyberpunk", era: "1980年代〜",
+    def: "近未来のディストピア（暗い管理社会）を舞台にした SF の一ジャンルです。高度な技術と、抑圧への反抗が描かれます。",
+    features: ["近未来のディストピア", "人工知能・サイバーウェアなどの高度な技術", "抑圧的な支配への反抗"],
+    logo: "△", logoWhy: "物語のジャンルの言葉なので、見た目は色や光で添えます。光る表現は3色の印刷にしにくいです。",
+    example: "サイバーパンク風に、夜の近未来の街を背景に、電子回路の線で描いたヒグマ。黒・青緑・マゼンタの3色",
+    sources: [ja("サイバーパンク"), en("Cyberpunk")] },
 
   /* ---- 画面のスタイル ---- */
   { id: "flat", cat: "screen", ja: "フラットデザイン", en: "flat design", era: "2012年ごろから",
@@ -418,6 +466,30 @@ const WORDS = [
     logo: "△", logoWhy: "透けとぼかしは、印刷や缶バッジ・3色に向きません。",
     example: "グラスモーフィズムで、すりガラス風の半透明の板に雪の結晶を載せたアイコン",
     sources: [en("Glassmorphism"), { label: "NN/g", url: "https://www.nngroup.com/articles/glassmorphism/" }] },
+  { id: "appicon", cat: "screen", ja: "アプリアイコン風", en: "app icon",
+    def: "スマホやパソコンの画面に並ぶ、アプリのしるしです。正方形で作り、角はシステムが丸く切り取ります。",
+    features: ["正方形（角はシステムが丸める）", "1つの考えを、少ない形で", "主役を中心に置く"],
+    logo: "◎", logoWhy: "正方形そのもので、小さく表示される前提の形です。Apple のガイドは、文字は欠かせないときだけと勧めています。",
+    example: "アプリアイコン風に、角の丸い正方形の中に、白い雪の結晶を1つ。背景は紺の単色",
+    sources: [{ label: "Apple HIG", url: "https://developer.apple.com/design/human-interface-guidelines/app-icons" }, ja("アイコン"), en("Icon_(computing)")] },
+  { id: "emoji", cat: "screen", ja: "絵文字風", en: "emoji",
+    def: "文の中に入れて使う、絵の文字です。打った文章に足りない気持ちを補う役目があります。",
+    features: ["文字と並ぶ小さな絵", "顔の表情・物・記号", "携帯電話で使われ、Unicode にも入った"],
+    logo: "○", logoWhy: "小さく表示される前提の、単純で丸い形です。表情を付けると親しみが出ます。",
+    example: "絵文字風に、にっこり笑うヒグマの顔。丸い形、太い輪郭、茶・黄土・黒の3色、白い背景",
+    sources: [ja("絵文字"), en("Emoji")] },
+  { id: "neobrutalism", cat: "screen", ja: "ネオブルータリズム", en: "neubrutalism / neo-brutalism",
+    def: "整いすぎた見た目をあえて避ける、ウェブや画面のデザインの流行です。強いコントラストと、はっきりした輪郭が特徴です。",
+    features: ["太い黒の輪郭線", "ぼかさない硬い影", "コントラストの強い色・太い文字"],
+    logo: "○", logoWhy: "太い輪郭とべた塗りは、小さくしても形が残ります。",
+    example: "ネオブルータリズム風に、太い黒の輪郭と、ずらした黒い影のついた \"GEG\" の文字。からし色と黒の2色",
+    sources: [{ label: "Manual do Usuário", url: "https://manualdousuario.net/en/neubrutalism-web-design/" }, ja("ブルータリズム")] },
+  { id: "claymorphism", cat: "screen", ja: "クレイモーフィズム", en: "claymorphism", era: "2022年ごろ",
+    def: "粘土のようにふっくらした、やわらかい立体に見せる画面のスタイルです。ニューモーフィズムをもとにしています。",
+    features: ["内側の影（明・暗）と外側の影", "角を大きく丸める", "背景はどんな色でもよい（ニューモーフィズムとの違い）"],
+    logo: "△", logoWhy: "影と立体感が持ち味で、1色や小さいサイズでは平らに見えます。",
+    example: "クレイモーフィズム風に、ふっくら膨らんだ粘土のような雪の結晶。水色と白の2色、淡い背景",
+    sources: [{ label: "Smashing Magazine", url: "https://www.smashingmagazine.com/2022/03/claymorphism-css-ui-design-trend/" }] },
 
   /* ---- 技法・画材 ---- */
   { id: "watercolor", cat: "technique", ja: "水彩", en: "watercolor painting",
@@ -516,6 +588,54 @@ const WORDS = [
     logo: "○", logoWhy: "白黒の面と彫り線は1色の版に向きます。細かい彫りは潰れます。",
     example: "木版画風に、黒一色の太い彫り跡で描いたヒグマ",
     sources: [ja("木版画"), en("Woodblock_printing"), tate("w/woodcut")] },
+  { id: "colorpencil", cat: "technique", ja: "色鉛筆", en: "colored pencil drawing",
+    def: "顔料と蝋などを固めた色の芯の鉛筆で描く絵です。",
+    features: ["色の芯の鉛筆で描く", "線を重ねて塗る", "日本では明治時代から学校の画材"],
+    logo: "△", logoWhy: "線の重なりや紙の質感は、小さくすると消えます。",
+    example: "色鉛筆で描いたような、やわらかい線の雪だるまとヒグマ。白い紙の背景",
+    g: "Vertex AI（Imagen）のガイド", sources: [ja("色鉛筆"), en("Colored_pencil")] },
+  { id: "chalk", cat: "technique", ja: "チョークアート", en: "chalkboard art",
+    def: "黒板にチョークで描く絵です。黒板アートとも呼ばれます。",
+    features: ["黒い黒板の背景", "飲食店のメニューボードや看板", "明るくポップな作品が多い"],
+    logo: "△", logoWhy: "黒い背景が前提で、かすれた線は小さくすると読みにくいです。",
+    example: "チョークアート風に、黒板に白と水色のチョークで描いた雪の結晶と \"GEG All Hokkaido\" の文字",
+    sources: [ja("チョークアート"), en("Chalkboard_art")] },
+  { id: "letterpress", cat: "technique", ja: "活版印刷（レタープレス）", en: "letterpress printing",
+    def: "活字を組んだ版にインクを付け、紙に押しつけて刷る印刷です。凸版印刷の一種です。",
+    features: ["活字を組んだ版で刷る", "盛り上がった面を紙に押しつける", "文字や絵が紙にへこむ（デジタル印刷との違い）"],
+    logo: "○", logoWhy: "1〜2色で刷る前提の形になります。へこみは画像の雰囲気で、グッズの印刷には出ません。",
+    example: "活版印刷風に、厚い紙に紺1色で刷った \"GEG All Hokkaido STAFF\" の文字と小さな雪の結晶",
+    sources: [ja("活版印刷"), en("Letterpress_printing")] },
+  { id: "eraserstamp", cat: "technique", ja: "消しゴムはんこ", en: "eraser stamp",
+    def: "消しゴムをカッターや彫刻刀で彫って作る、はんこです。手づくりの趣味として親しまれています。",
+    features: ["消しゴムを彫ったはんこ", "消しゴムスタンプ・消しゴム版画とも呼ぶ"],
+    logo: "○", logoWhy: "1色で、彫れる程度に単純な形になります。",
+    example: "消しゴムはんこ風に、朱色1色で押したような、少しかすれた丸いヒグマの顔",
+    sources: [ja("消しゴムはんこ")] },
+  { id: "screenprint", cat: "technique", ja: "シルクスクリーン", en: "screen printing",
+    def: "インクが通る穴と通らないところを作った版で刷る、孔版画の技法です。",
+    features: ["メッシュの版の穴からインクを通す", "多色刷りは、ふつう1色に1版", "布・プラスチック・金属など、いろいろな素材に刷れる"],
+    logo: "○", logoWhy: "1色1版なので、色数の少ないべた塗りの形になり、グッズの印刷に近くなります。",
+    example: "シルクスクリーン風に、紺とからし色の2色を少しずらして刷り重ねたヒグマ。生成りの背景",
+    sources: [ja("シルクスクリーン"), en("Screen_printing")] },
+  { id: "stencil", cat: "technique", ja: "ステンシル", en: "stencil",
+    def: "穴をあけた型の上から色を付け、穴の形だけを写す技法です。写した絵と型の両方をステンシルと呼びます。",
+    features: ["型の穴からだけ色が付く", "切り抜いた内側の部分は、細い「ブリッジ」でつなぐ", "吹きつけ（スプレー）の絵にも使う"],
+    logo: "◎", logoWhy: "1色のべた塗りで、形がはっきりします。ブリッジのすき間も味になります。",
+    example: "ステンシル風に、型紙を切り抜いて吹きつけたような \"GEG\" の文字と雪の結晶。黒1色",
+    sources: [en("Stencil")] },
+  { id: "mosaic", cat: "technique", ja: "モザイク", en: "mosaic",
+    def: "小さなかけらを寄せて埋め込み、絵や模様を表す装飾の技法です。",
+    features: ["石・タイル・ガラス・貝殻などの小片", "建物の床や壁の装飾", "宗教画や幾何学模様"],
+    logo: "○", logoWhy: "かけらを大きめにすれば、小さくしても形が残ります。",
+    example: "モザイク風に、大きめの四角いタイルを並べて描いた雪の結晶。青・水色・白の3色",
+    sources: [ja("モザイク"), en("Mosaic"), tate("m/mosaic")] },
+  { id: "blueprint", cat: "technique", ja: "ブループリント（青写真）", en: "blueprint", era: "1842年〜",
+    def: "技術の図面を、光に反応する紙に写した複製です。青地に白い線の見た目は、青写真の方式によるものです。",
+    features: ["青い地に白い線", "機械や建物の図面", "1842年に生まれた複写の方式"],
+    logo: "○", logoWhy: "青と白の2色で、線だけで描けます。細い寸法線は小さくすると消えます。",
+    example: "ブループリント風に、青い方眼の地に白い線で描いた、雪の結晶の設計図のようなマーク",
+    sources: [ja("青写真"), en("Blueprint")] },
 
   /* ---- 立体・構図 ---- */
   { id: "isometric", cat: "view", ja: "アイソメトリック", en: "isometric illustration",
@@ -548,6 +668,36 @@ const WORDS = [
     logo: "◎", logoWhy: "余白に別の形が見える型は、少ない色・小さいサイズで効きます。1回では出にくいので、直しながら。",
     example: "ネガティブスペースを使って、白い余白が雪の結晶に見える北海道の形のロゴ",
     g: "Gemini API", sources: [ja("余白"), en("Negative_space")] },
+  { id: "symmetry", cat: "view", ja: "シンメトリー（左右対称）", en: "symmetry / reflection symmetry",
+    def: "ある直線を軸に折り返すと、ぴったり重なる形です。線対称ともいいます。",
+    features: ["真ん中の軸で折ると重なる", "つり合いと調和の感じが出る"],
+    logo: "◎", logoWhy: "落ち着いて見え、エンブレムや紋章の形にしやすいです。",
+    example: "左右対称（シンメトリー）に、中央の軸をはさんで向かい合う2頭のヒグマと雪の結晶。2色",
+    sources: [ja("線対称"), en("Reflection_symmetry"), en("Symmetry")] },
+  { id: "geometric", cat: "view", ja: "ジオメトリック（幾何学）", en: "geometric abstraction / geometric pattern",
+    def: "円・三角・四角・直線などの単純な図形を組み合わせてつくる、模様や抽象の表現です。",
+    features: ["単純な図形を部品にする", "平行移動・回転・反転でくり返す", "何かを写さない抽象の作品にも"],
+    logo: "◎", logoWhy: "単純な図形だけで組めて、3色に収めやすいです。",
+    example: "ジオメトリック風に、円と三角だけで組み立てたヒグマの顔。紺・からし色・白の3色",
+    sources: [ja("幾何学模様"), en("Geometric_abstraction")] },
+  { id: "silhouette", cat: "view", ja: "シルエット", en: "silhouette",
+    def: "輪郭の中を塗りつぶした、1色の像です。",
+    features: ["輪郭の内側を1色で塗る", "18世紀の、黒い紙で横顔を切り抜いた切り絵が始まり", "物の形そのものを表す"],
+    logo: "◎", logoWhy: "1色で形だけを見せるので、小さくしても何か分かります。",
+    example: "シルエットで、山の稜線と横向きのヒグマを黒1色で。白い背景",
+    sources: [ja("シルエット"), en("Silhouette")] },
+  { id: "doubleexposure", cat: "view", ja: "ダブルエクスポージャー（二重露光）", en: "double exposure / multiple exposure",
+    def: "写真で、1コマの中に複数の画像を重ねて写す技術です。",
+    features: ["2つ以上の画像を重ねる", "二重写しともいう", "画像処理ソフトでも同じ効果が出せる"],
+    logo: "△", logoWhy: "景色が重なるぶん細かくなり、小さくすると読みにくいです。外形を太くすれば使えます。",
+    example: "ダブルエクスポージャー風に、ヒグマの横顔のシルエットの中に、雪の森の景色が重なって見える。紺と白の2色",
+    sources: [ja("多重露光"), en("Multiple_exposure")] },
+  { id: "tessellation", cat: "view", ja: "テセレーション（しきつめ模様）", en: "tessellation",
+    def: "決まった形の「タイル」で、すき間も重なりもなく平面を敷きつめることです。",
+    features: ["すき間も重なりもない", "同じ形のくり返し", "タイル張り・平面充填ともいう"],
+    logo: "○", logoWhy: "背景や帯に向きます。主役にするなら、くり返す形を1つに絞ります。",
+    example: "テセレーション風に、同じ形の雪の結晶とヒグマがすき間なく並ぶ、正方形の模様。2色",
+    sources: [ja("タイル張り"), en("Tessellation")] },
 
   /* ---- ロゴの型 ---- */
   { id: "emblem", cat: "logo", ja: "エンブレム／バッジ", en: "emblem logo / badge logo",
@@ -580,6 +730,92 @@ const WORDS = [
     logo: "◎", logoWhy: "1色・線だけで、小さくても読めます。",
     example: "ラインアイコン風に、一定の太さの線だけで描いたヒグマ。1色、白い背景、正方形",
     g: "Gemini API（icon）", sources: [ja("ピクトグラム"), ja("アイコン"), en("Pictogram")] },
+  { id: "combination", cat: "logo", ja: "コンビネーションマーク", en: "combination mark",
+    def: "マーク（記号や絵）と、名前の文字（ロゴタイプ）を組み合わせたロゴです。日本では「ロゴマーク」とも呼ばれます。",
+    features: ["マーク＋名前の文字", "横に並べる・上下に積む・一体にする"],
+    logo: "◎", logoWhy: "マークだけ・文字だけに分けても使えます。小さいときはマークだけにします。",
+    example: "コンビネーションマークで、上に雪の結晶のマーク、下に \"GEG All Hokkaido\" の文字。紺1色、正方形",
+    sources: [ja("ロゴタイプ"), { label: "GoDaddy", url: "https://www.godaddy.com/resources/skills/combination-logo" }] },
+  { id: "symbolmark", cat: "logo", ja: "シンボルマーク", en: "symbol mark / logomark",
+    def: "会社・団体・家系などを象徴する図案（マーク）です。",
+    features: ["団体などを象徴する図案", "学校の校章も同じ仲間", "家紋や騎士の盾の図案も含む"],
+    logo: "◎", logoWhy: "文字に頼らず形で覚えてもらうので、小さくしても分かる形になります。",
+    example: "文字を使わないシンボルマークで、雪の結晶とヒグマを1つの形にまとめたもの。紺1色、正方形",
+    sources: [ja("シンボルマーク"), en("Logo")] },
+  { id: "heraldry", cat: "logo", ja: "紋章（ヘラルドリー）", en: "heraldry / coat of arms",
+    def: "個人・家系・団体などを見分けるための、ヨーロッパ発祥の図案です。",
+    features: ["盾を中心に、兜・飾り・支える動物・標語を組み合わせる", "決まりに沿って言葉で記述される", "中世ヨーロッパの貴族社会から"],
+    logo: "○", logoWhy: "盾の形はロゴに向きます。飾りを全部入れると細かくなるので、盾と動物だけに絞ります。",
+    example: "紋章風に、盾の中に雪の結晶、両側に立ち上がる2頭のヒグマ、下のリボンに \"GEG\"。紺・金・白の3色",
+    sources: [ja("紋章"), ja("紋章学"), en("Heraldry")] },
+  { id: "college", cat: "logo", ja: "カレッジロゴ", en: "varsity / collegiate lettering",
+    def: "アメリカの学校で、運動部などで活躍した生徒に贈られる大きな文字（バーシティ・レター）の見た目です。",
+    features: ["太いブロック体の頭文字", "シェニール織とフェルトのワッペン", "1930年代から上着に付けられた"],
+    logo: "◎", logoWhy: "太い文字とふち取りで遠くから読め、Tシャツやパーカーに載せやすいです。",
+    example: "カレッジロゴ風に、ふち取りのある太いブロック体で \"GEG\"、下に小さく \"ALL HOKKAIDO\"。紺と白の2色",
+    sources: [en("Varsity_letter")] },
+  { id: "pennant", cat: "logo", ja: "ペナント", en: "pennant",
+    def: "細長い旗です。細長い二等辺三角形の「長三角旗」が多く使われます。",
+    features: ["細長い二等辺三角形が多い", "長方形・台形・燕尾形もある"],
+    logo: "○", logoWhy: "横長の形なので、正方形に収めるときは斜めに置くなど工夫します。",
+    example: "ペナント風に、細長い三角の旗に \"GEG All Hokkaido\" の文字と雪の結晶。紺地に白、正方形の中に斜めに置く",
+    sources: [ja("ペナント"), en("Pennant")] },
+  { id: "sticker", cat: "logo", ja: "ステッカー", en: "sticker",
+    def: "片面にのりの付いた、紙やビニールなどのラベルです。飾りにも、目印にも使います。",
+    features: ["片面にのり", "形も大きさもさまざま", "持ち物に貼って飾る"],
+    logo: "◎", logoWhy: "切り抜いた形がそのままグッズになります。白いふちを付けると、どこに貼っても形が見えます。",
+    example: "ステッカー風に、白い太いふちで切り抜いた、丸いヒグマと雪の結晶。3色まで、白い背景",
+    g: "Developers Blog（sticker）", sources: [en("Sticker")] },
+
+  /* ---- 文字・書体 ---- */
+  { id: "sans", cat: "type", ja: "サンセリフ体（ゴシック体）", en: "sans-serif",
+    def: "線の端に飾り（セリフ）のない書体です。日本ではゴシック体とも呼びます。",
+    features: ["線の端に飾りがない", "縦横の太さがそろって見える（ゴシック体）", "英語で Gothic と言うと、ふつうはブラックレターのこと"],
+    logo: "◎", logoWhy: "線の太さがそろい、小さくしても読めます。太い・細いも添えて頼みます。",
+    example: "太いサンセリフ体で \"GEG All Hokkaido\" と組み、上に小さな雪の結晶。紺1色",
+    g: "Developers Blog（sans-serif）", sources: [ja("サンセリフ"), ja("ゴシック体"), en("Sans-serif")] },
+  { id: "serif", cat: "type", ja: "セリフ体（明朝体）", en: "serif",
+    def: "文字の線の端に、小さな飾り（セリフ）がある書体です。明朝体もセリフ書体に分類されます。",
+    features: ["線の端の小さな飾り", "欧文ではローマン体とも呼ぶ", "明朝体は印刷の標準的な書体"],
+    logo: "○", logoWhy: "落ち着いた、きちんとした感じになります。細い線は小さくするとかすれます。",
+    example: "上品なセリフ体で \"GEG All Hokkaido\"、文字の間を広めにあけて。紺1色、白い背景",
+    sources: [ja("セリフ_(文字)"), ja("明朝体"), en("Serif")] },
+  { id: "maru", cat: "type", ja: "丸ゴシック", en: "rounded sans-serif",
+    def: "ゴシック体と同じくほぼ均一な太さで、線の端や曲がり角を丸めた書体です。",
+    features: ["線の太さがほぼ均一", "線の端と曲がり角が丸い"],
+    logo: "◎", logoWhy: "やわらかく、小さくしても読めます。",
+    example: "丸ゴシックで \"GEG\" と大きく、下に \"All Hokkaido\"。角の丸い文字、2色",
+    sources: [ja("丸ゴシック体")] },
+  { id: "slab", cat: "type", ja: "スラブセリフ", en: "slab serif", era: "19世紀初めから",
+    def: "分厚いブロックのようなセリフ（飾り）を持つ書体です。",
+    features: ["四角く分厚いセリフ", "線の太さの変化が小さいものが多い", "エジプシャンとも呼ばれる"],
+    logo: "○", logoWhy: "太くて力強く、看板やスポーツのロゴに近い感じになります。",
+    example: "太いスラブセリフで \"GEG\"、その下に細い線をはさんで \"ALL HOKKAIDO\"。からし色と紺の2色",
+    sources: [ja("スラブセリフ"), en("Slab_serif")] },
+  { id: "script", cat: "type", ja: "筆記体（スクリプト）", en: "script typeface",
+    def: "手書きの流れるような筆の運びをもとにした書体です。文字を続けて書きます。",
+    features: ["一筆書きのように文字をつなげる", "きちんとした型と、くだけた型がある", "本文より見出しや看板に使う"],
+    logo: "△", logoWhy: "線が細く続くので、小さくすると読みにくいです。太めの筆記体を頼みます。",
+    example: "太めの筆記体で \"Hokkaido\" と流れるように書き、上に小さく \"GEG ALL\"。紺1色",
+    sources: [ja("筆記体"), ja("スクリプト_(書体)"), en("Script_typeface")] },
+  { id: "fude", cat: "type", ja: "筆文字", en: "brush lettering / Japanese calligraphy",
+    def: "筆と墨で書いた文字です。書道は、書くことで文字の美しさを表す東洋の芸術です。",
+    features: ["筆と墨で書く", "漢字とかなの書", "中国が起源"],
+    logo: "○", logoWhy: "太い一筆なら小さくしても読めます。かすれが多いと潰れます。",
+    example: "筆文字で、太い筆で勢いよく書いた「北海道」と、小さく \"GEG\"。墨の黒1色、白い背景",
+    sources: [ja("書道"), en("Japanese_calligraphy")] },
+  { id: "edomoji", cat: "type", ja: "江戸文字", en: "Edomoji", era: "江戸時代",
+    def: "江戸時代に盛んに使われた図案文字の総称です。寄席文字・芝居文字・相撲字などがあり、それぞれ用途が違いました。",
+    features: ["宣伝のために生まれた図案の文字", "寄席・芝居・相撲・提灯など、用途ごとの書体", "縁取りした文字・白抜きの文字もある"],
+    logo: "○", logoWhy: "太く黒い文字は小さくしても目立ちます。ローマ字だと江戸文字らしさは弱まります。",
+    example: "江戸文字風に、太い筆で書いた「GEG」と「北海道」を、提灯の文字のように組む。黒と朱の2色",
+    sources: [ja("江戸文字"), ja("寄席文字"), en("Edomoji")] },
+  { id: "bubble", cat: "type", ja: "バブル文字", en: "bubble letters", era: "1970年代・ニューヨーク",
+    def: "丸く、ふわふわと膨らんだ、雲のような文字です。1970年代のニューヨークのグラフィティから広まりました。",
+    features: ["丸く膨らんだ太い文字", "少ない曲線で手早く描ける", "お菓子など楽しい商品にも使われる"],
+    logo: "○", logoWhy: "太く丸いので小さくしても形が残ります。くだけた感じになります。",
+    example: "バブル文字で、ぷっくり膨らんだ \"GEG\"。水色と紺の2色、太い輪郭、白い背景",
+    sources: [{ label: "Sourcetype", url: "https://www.sourcetype.com/editorial/14561/a-brief-history-of-bubble-letters" }] },
 
   /* ---- 日本の表現 ---- */
   { id: "ukiyoe", cat: "japan", ja: "浮世絵", en: "ukiyo-e / Japanese woodblock print", era: "江戸時代",
@@ -624,6 +860,36 @@ const WORDS = [
     logo: "○", logoWhy: "丸い形と少ない線は、小さくしても強いです。パステルは印刷で薄く出ます。",
     example: "kawaii スタイルのステッカー風に、丸いヒグマ。太い輪郭線、2色、白い背景",
     g: "Gemini API・Developers Blog（kawaii-style）", sources: [en("Kawaii")] },
+  { id: "taisho", cat: "japan", ja: "大正ロマン", en: "Taisho Roman", era: "大正時代（1912〜26年）",
+    def: "大正時代の趣を伝える思潮や文化を指す言葉です。和洋折衷の様式や、新旧が混ざった大衆文化が当てはまります。",
+    features: ["和と洋が混ざる（和洋折衷）", "新しい時代への理想", "1960年代末〜70年代前半に広まった言葉"],
+    logo: "△", logoWhy: "言葉だけでは見た目が定まらないので、色・柄・書体を添えます。",
+    example: "大正ロマン風に、矢絣の柄を背景にした丸いマークに、レトロな文字で \"GEG\"。えんじ・紺・生成りの3色",
+    sources: [ja("大正ロマン"), en("Taish%C5%8D_Roman")] },
+  { id: "mizuhiki", cat: "japan", ja: "水引", en: "mizuhiki",
+    def: "祝儀や不祝儀のときに、贈り物の包みにかける飾りの紐です。独特の飾り結びとして発達しました。",
+    features: ["紅白・黒白などの紐", "紙縒（こより）がもとになった紐", "鶴・亀・松などの飾りにもなる"],
+    logo: "○", logoWhy: "結びの形は線で描けて、2色に収まります。結び目を1つに絞ります。",
+    example: "水引風に、紅白の紐を結んで雪の結晶の形にしたマーク。赤と白の2色、生成りの背景",
+    sources: [ja("水引"), en("Mizuhiki")] },
+  { id: "aizome", cat: "japan", ja: "藍染め", en: "aizome / indigo dye",
+    def: "藍の植物を染料にした染め物です。",
+    features: ["藍の植物で染める", "薄いと緑み、濃いと紫みを帯びる"],
+    logo: "○", logoWhy: "藍と白の2色で成り立ちます。",
+    example: "藍染め風に、藍色の布に白く染め抜いた雪の結晶とヒグマ。藍と白の2色",
+    sources: [ja("藍染め"), en("Indigo_dye")] },
+  { id: "senjafuda", cat: "japan", ja: "千社札", en: "senjafuda",
+    def: "神社やお寺に参拝した記念に貼る、自分の名前などを書いた札です。納札（のうさつ）ともいいます。",
+    features: ["名前や住所を書いた札", "参拝の記念に貼る"],
+    logo: "○", logoWhy: "札の形と太い文字で、ステッカーにしやすいです。",
+    example: "千社札風に、札の中に太い文字で「北海道」と \"GEG\"。黒・朱・生成りの3色",
+    sources: [ja("千社札"), en("Senjafuda")] },
+  { id: "manga", cat: "japan", ja: "漫画風", en: "manga style",
+    def: "日本の漫画の絵の見た目です。白黒の線と、網点などのスクリーントーンで濃淡を表します。",
+    features: ["白黒の線画", "スクリーントーン（網点など）で濃淡や柄を表す", "日本では1950年代からモノクロの漫画にトーンを使う"],
+    logo: "△", logoWhy: "線と網点が細かく、小さくすると潰れます。顔だけ・1コマだけに絞ります。",
+    example: "漫画風に、白黒の線とスクリーントーンで描いた、決めポーズのヒグマ。吹き出しに \"GEG!\"",
+    sources: [ja("漫画"), ja("スクリーントーン"), en("Manga")] },
 
   /* ---- 色・光 ---- */
   { id: "pastel", cat: "color", ja: "パステル", en: "pastel colors",
@@ -656,18 +922,24 @@ const WORDS = [
     logo: "○", logoWhy: "3色に絞りやすいです。",
     example: "アースカラー（茶・深緑・生成り）の3色で、大雪山のシンプルなマーク",
     sources: [ja("アースカラー"), en("Earth_tone")] },
+  { id: "kusumi", cat: "color", ja: "くすみカラー", en: "muted / grayish colors",
+    def: "色に灰色を混ぜた、彩度の低い落ち着いた色です。色彩学では、色に灰色を混ぜたものを「トーン」と呼びます。",
+    features: ["灰色を混ぜて彩度を下げる", "白を混ぜるとパステル、黒を混ぜると濃い色になる"],
+    logo: "○", logoWhy: "派手になりすぎず、3色に絞りやすいです。暗い色同士は見分けにくいので、明るさに差をつけます。",
+    example: "くすみカラー（くすんだ青・グレージュ・生成り）の3色で、雪の結晶とヒグマのシンプルなマーク",
+    sources: [ja("色調"), en("Tint,_shade_and_tone")] },
 ];
 
 /* 見本の画像。作る順（ロゴ向きを優先し、見た目と種類がばらけるように）。
    画像ができたら SAMPLE_IMG に「id: 'samples/id.jpg'」を足す（tools/make_samples.py が書き換える） */
 const SAMPLE_ORDER = ["flat", "lineart", "kamon", "bauhaus", "emblem", "isometric",
   "papercut", "negative", "popart", "ukiyoe", "swiss", "watercolor"];
-const SAMPLE_IMG = { artdeco: "samples/artdeco.jpg", bauhaus: "samples/bauhaus.jpg", birdseye: "samples/birdseye.jpg", brutalism: "samples/brutalism.jpg", clay: "samples/clay.jpg", constructivism: "samples/constructivism.jpg", duotone: "samples/duotone.jpg", earth: "samples/earth.jpg", emblem: "samples/emblem.jpg", embroidery: "samples/embroidery.jpg", felt: "samples/felt.jpg", flat: "samples/flat.jpg", glass: "samples/glass.jpg", halftone: "samples/halftone.jpg", isometric: "samples/isometric.jpg", kamon: "samples/kamon.jpg", kawaii: "samples/kawaii.jpg", knolling: "samples/knolling.jpg", lineart: "samples/lineart.jpg", lineicon: "samples/lineicon.jpg", lowpoly: "samples/lowpoly.jpg", mascot: "samples/mascot.jpg", material: "samples/material.jpg", memphis: "samples/memphis.jpg", midcentury: "samples/midcentury.jpg", minimal: "samples/minimal.jpg", mono: "samples/mono.jpg", monogram: "samples/monogram.jpg", negative: "samples/negative.jpg", neon: "samples/neon.jpg", neumorphism: "samples/neumorphism.jpg", nouveau: "samples/nouveau.jpg", oil: "samples/oil.jpg", papercraft: "samples/papercraft.jpg", papercut: "samples/papercut.jpg", pastel: "samples/pastel.jpg", pencil: "samples/pencil.jpg", pixel: "samples/pixel.jpg", popart: "samples/popart.jpg", render3d: "samples/render3d.jpg", riso: "samples/riso.jpg", showa: "samples/showa.jpg", skeuo: "samples/skeuo.jpg", stainedglass: "samples/stainedglass.jpg", sumie: "samples/sumie.jpg", swiss: "samples/swiss.jpg", ukiyoe: "samples/ukiyoe.jpg", vaporwave: "samples/vaporwave.jpg", vector: "samples/vector.jpg", wagara: "samples/wagara.jpg", watercolor: "samples/watercolor.jpg", woodcut: "samples/woodcut.jpg", wordmark: "samples/wordmark.jpg", y2k: "samples/y2k.jpg", yuru: "samples/yuru.jpg" };
+const SAMPLE_IMG = { aizome: "samples/aizome.jpg", appicon: "samples/appicon.jpg", artdeco: "samples/artdeco.jpg", bauhaus: "samples/bauhaus.jpg", birdseye: "samples/birdseye.jpg", blueprint: "samples/blueprint.jpg", brutalism: "samples/brutalism.jpg", bubble: "samples/bubble.jpg", chalk: "samples/chalk.jpg", clay: "samples/clay.jpg", claymorphism: "samples/claymorphism.jpg", college: "samples/college.jpg", colorpencil: "samples/colorpencil.jpg", combination: "samples/combination.jpg", constructivism: "samples/constructivism.jpg", cubism: "samples/cubism.jpg", cyberpunk: "samples/cyberpunk.jpg", destijl: "samples/destijl.jpg", doubleexposure: "samples/doubleexposure.jpg", duotone: "samples/duotone.jpg", earth: "samples/earth.jpg", edomoji: "samples/edomoji.jpg", emblem: "samples/emblem.jpg", embroidery: "samples/embroidery.jpg", emoji: "samples/emoji.jpg", eraserstamp: "samples/eraserstamp.jpg", felt: "samples/felt.jpg", flat: "samples/flat.jpg", fude: "samples/fude.jpg", geometric: "samples/geometric.jpg", glass: "samples/glass.jpg", halftone: "samples/halftone.jpg", heraldry: "samples/heraldry.jpg", isometric: "samples/isometric.jpg", kamon: "samples/kamon.jpg", kawaii: "samples/kawaii.jpg", knolling: "samples/knolling.jpg", kusumi: "samples/kusumi.jpg", letterpress: "samples/letterpress.jpg", lineart: "samples/lineart.jpg", lineicon: "samples/lineicon.jpg", lowpoly: "samples/lowpoly.jpg", manga: "samples/manga.jpg", maru: "samples/maru.jpg", mascot: "samples/mascot.jpg", material: "samples/material.jpg", memphis: "samples/memphis.jpg", midcentury: "samples/midcentury.jpg", minimal: "samples/minimal.jpg", mizuhiki: "samples/mizuhiki.jpg", mono: "samples/mono.jpg", monogram: "samples/monogram.jpg", mosaic: "samples/mosaic.jpg", negative: "samples/negative.jpg", neobrutalism: "samples/neobrutalism.jpg", neon: "samples/neon.jpg", neumorphism: "samples/neumorphism.jpg", nordic: "samples/nordic.jpg", nouveau: "samples/nouveau.jpg", oil: "samples/oil.jpg", opart: "samples/opart.jpg", papercraft: "samples/papercraft.jpg", papercut: "samples/papercut.jpg", pastel: "samples/pastel.jpg", pencil: "samples/pencil.jpg", pennant: "samples/pennant.jpg", pixel: "samples/pixel.jpg", popart: "samples/popart.jpg", psychedelic: "samples/psychedelic.jpg", render3d: "samples/render3d.jpg", retrofuture: "samples/retrofuture.jpg", riso: "samples/riso.jpg", sans: "samples/sans.jpg", screenprint: "samples/screenprint.jpg", script: "samples/script.jpg", senjafuda: "samples/senjafuda.jpg", serif: "samples/serif.jpg", showa: "samples/showa.jpg", silhouette: "samples/silhouette.jpg", skeuo: "samples/skeuo.jpg", slab: "samples/slab.jpg", stainedglass: "samples/stainedglass.jpg", steampunk: "samples/steampunk.jpg", stencil: "samples/stencil.jpg", sticker: "samples/sticker.jpg", sumie: "samples/sumie.jpg", swiss: "samples/swiss.jpg", symbolmark: "samples/symbolmark.jpg", symmetry: "samples/symmetry.jpg", taisho: "samples/taisho.jpg", tessellation: "samples/tessellation.jpg", ukiyoe: "samples/ukiyoe.jpg", vaporwave: "samples/vaporwave.jpg", vector: "samples/vector.jpg", wagara: "samples/wagara.jpg", watercolor: "samples/watercolor.jpg", woodcut: "samples/woodcut.jpg", wordmark: "samples/wordmark.jpg", y2k: "samples/y2k.jpg", yuru: "samples/yuru.jpg" };
 /* 「〇〇（英語）のスタイルで、」。名前が「スタイル」「風」で終わる言葉は「〇〇（英語）で、」 */
 function styleLead(w) {
   return w.ja + "（" + w.en + "）" + (/(スタイル|風)$/.test(w.ja) ? "で、" : "のスタイルで、");
 }
-/* 見本を作った頼み方（2026-10-25 に Gemini で55語とも、毎回新しいチャットで） */
+/* 見本を作った頼み方（Gemini で100語とも、毎回新しいチャットで。55語は 2026-10-25、45語は 2026-10-27〜） */
 function samplePrompt(w) {
   const fu = /風$/.test(w.ja) ? w.ja : w.ja + "風";
   return "GEG ALL Hokkaido のロゴを作ります。" + fu + "で作成してください。正方形で作ってください。Googleの4色は使わないでください。";
@@ -680,6 +952,7 @@ const CATS = [
   { key: "technique", label: "技法・画材" },
   { key: "view", label: "立体・構図" },
   { key: "logo", label: "ロゴの型" },
+  { key: "type", label: "文字・書体" },
   { key: "japan", label: "日本の表現" },
   { key: "color", label: "色・光" },
 ];
