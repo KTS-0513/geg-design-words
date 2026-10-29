@@ -1,0 +1,1464 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>スライド投票フォームの設定</title>
+<meta name="description" content="Google スライドに貼った作品から、選択肢に画像の付いた Google フォームを GAS で作るための設定の方式（Cloud のプロジェクト・API・同意画面・紐づけ・接続の確認）">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Zen+Kaku+Gothic+New:wght@700;900&family=Source+Code+Pro:wght@400;600&display=swap">
+<style>
+/* 1段組みの手順書。上に仕組みの流れ、下に順番どおりの手順。Cloud 側とスライド側を色で分ける */
+:root {
+  --bg: #ffffff;
+  --surface: #f5f4f8;
+  --ink: #1e1c24;
+  --muted: #5d5a68;
+  --line: #dcd9e3;
+  --forms: #5b3fa8;      /* フォーム・GAS 側 */
+  --forms-soft: #efeaf9;
+  --cloud: #1f6f8b;      /* Cloud 側 */
+  --cloud-soft: #e5f1f5;
+  --slides: #9a6a00;     /* スライド側 */
+  --slides-soft: #fbf1d9;
+  --warn: #a33a2b;
+  --warn-soft: #fbeae7;
+  --ok: #2f7a3d;
+  --f-display: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --f-body: "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+  --f-code: "Source Code Pro", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #16151b; --surface: #211f28; --ink: #ecebf1; --muted: #a9a6b4; --line: #37343f;
+    --forms: #b6a2ef; --forms-soft: #2a2340; --cloud: #7fc4dc; --cloud-soft: #17303a;
+    --slides: #e3b65a; --slides-soft: #34290f; --warn: #f0917f; --warn-soft: #3a1f1b; --ok: #82c98f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #16151b; --surface: #211f28; --ink: #ecebf1; --muted: #a9a6b4; --line: #37343f;
+  --forms: #b6a2ef; --forms-soft: #2a2340; --cloud: #7fc4dc; --cloud-soft: #17303a;
+  --slides: #e3b65a; --slides-soft: #34290f; --warn: #f0917f; --warn-soft: #3a1f1b; --ok: #82c98f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.8;
+}
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+.wrap {
+  max-width: 820px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 64px;
+  display: grid; gap: 56px;
+}
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; line-height: 1.4; margin: 0; }
+h1 { font-size: clamp(26px, 5vw, 36px); font-weight: 900; }
+h2 { font-size: 23px; font-weight: 700; padding-bottom: 8px; border-bottom: 2px solid var(--ink); }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+a { color: var(--forms); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--forms); outline-offset: 2px; }
+code, kbd {
+  font-family: var(--f-code); font-size: 0.88em;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px;
+  overflow-wrap: anywhere;
+}
+.ui { font-weight: 700; overflow-wrap: anywhere; }
+.ui::before { content: "［"; font-weight: 400; color: var(--muted); }
+.ui::after { content: "］"; font-weight: 400; color: var(--muted); }
+section { display: grid; gap: 20px; min-width: 0; }
+.eyebrow { font-size: 13px; letter-spacing: 0.08em; color: var(--muted); }
+.lead { font-size: 17px; max-width: 40em; }
+.meta { font-size: 14px; color: var(--muted); }
+
+/* 仕組みの流れ */
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.flow .box { border: 1.5px solid var(--line); border-radius: 6px; padding: 14px 14px 16px; display: grid; gap: 6px; align-content: start; position: relative; min-width: 0; }
+.flow .box .where { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; }
+.flow .box b { font-family: var(--f-display); font-size: 17px; }
+.flow .box p { font-size: 14px; line-height: 1.6; color: var(--muted); }
+.flow .box:not(:last-child)::after {
+  content: "→"; position: absolute; right: -10px; top: 50%; transform: translate(50%, -50%);
+  font-weight: 700; color: var(--muted); background: var(--bg); line-height: 1; padding: 2px 0;
+}
+.k-slides { border-color: var(--slides) !important; background: var(--slides-soft); }
+.k-slides .where { color: var(--slides); }
+.k-gas { border-color: var(--forms) !important; background: var(--forms-soft); }
+.k-gas .where { color: var(--forms); }
+.k-cloud { border-color: var(--cloud) !important; background: var(--cloud-soft); }
+.k-cloud .where { color: var(--cloud); }
+@media (max-width: 680px) {
+  .flow { grid-template-columns: 1fr; }
+  .flow .box:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -10px; transform: translate(50%, 50%); padding: 0 6px; }
+}
+
+/* 2つの形 */
+.modes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.mode { border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.mode.main { border: 2px solid var(--forms); }
+.mode .tag { justify-self: start; }
+.mode ul { margin: 0; padding-left: 1.2em; font-size: 15px; }
+@media (max-width: 600px) { .modes { grid-template-columns: 1fr; } }
+
+.tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 3px; border: 1px solid currentColor; line-height: 1.7; white-space: nowrap; }
+.tag.cloud { color: var(--cloud); } .tag.slides { color: var(--slides); } .tag.gas { color: var(--forms); } .tag.warn { color: var(--warn); }
+
+/* 手順 */
+.phase { display: grid; gap: 4px; }
+.phase .tag { justify-self: start; }
+ol.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: step; }
+ol.steps > li { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 14px; padding-block: 20px; border-top: 1px solid var(--line); }
+ol.steps > li:last-child { border-bottom: 1px solid var(--line); }
+.num { font-family: var(--f-display); font-weight: 900; font-size: 30px; line-height: 1; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 2px; }
+.step { display: grid; gap: 10px; min-width: 0; }
+.step .why { font-size: 14px; color: var(--muted); }
+.step ol, .step ul { margin: 0; padding-left: 1.4em; display: grid; gap: 4px; }
+.note { font-size: 14px; border-left: 3px solid var(--cloud); padding: 6px 12px; background: var(--cloud-soft); border-radius: 0 4px 4px 0; }
+.note.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.note.ok { border-left-color: var(--ok); }
+
+/* 表 */
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; line-height: 1.6; min-width: 560px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+tr:last-child td { border-bottom: 0; }
+th { background: var(--surface); font-weight: 700; font-size: 13px; white-space: nowrap; }
+td code { white-space: normal; }
+td:first-child code { white-space: nowrap; overflow-wrap: normal; }
+
+/* コード */
+.code { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; min-width: 0; }
+.code .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 6px 8px 6px 12px; background: var(--surface); border-bottom: 1px solid var(--line); font-size: 13px; }
+.code .bar span { font-family: var(--f-code); }
+.code pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--f-code); font-size: 13.5px; line-height: 1.65; }
+.code pre.long { max-height: 560px; overflow: auto; font-size: 13px; tab-size: 2; }
+button.copy { font: inherit; font-size: 13px; font-weight: 700; color: var(--forms); background: var(--bg); border: 1px solid var(--forms); border-radius: 4px; padding: 3px 12px; cursor: pointer; }
+button.copy:hover { background: var(--forms-soft); }
+.copied { font-size: 12px; color: var(--ok); margin-right: auto; padding-left: 8px; }
+
+/* 使い方のメニュー */
+.menu { display: grid; gap: 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.menu > div { display: grid; grid-template-columns: minmax(0, 15em) minmax(0, 1fr); gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.menu > div:last-child { border-bottom: 0; }
+.menu b { font-family: var(--f-display); }
+.menu p { font-size: 15px; }
+@media (max-width: 600px) { .menu > div { grid-template-columns: 1fr; gap: 2px; } }
+
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.checks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; font-size: 15px; }
+.checks li::before { content: "□"; color: var(--muted); }
+
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 4px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header style="display:grid; gap:14px;">
+    <p class="eyebrow">Google スライド × Apps Script × Google フォーム</p>
+    <h1>スライドから投票フォームを作る GAS の設定</h1>
+    <p class="lead">参加者が1つのスライドに1人1枚ずつ作品を貼り、メニューを1回押すと、<strong>選択肢に作品の画像が付いた投票フォーム</strong>ができます。このページは、その GAS を動かせる状態にするまでの方式をまとめたものです。</p>
+    <p class="meta">準備にかかる時間：Cloud の準備 約15分・スライドに入れて確かめる 約10分／画面の名前は 2026年10月24日時点</p>
+  </header>
+
+  <section aria-labelledby="h-flow">
+    <h2 id="h-flow">仕組み</h2>
+    <div class="flow">
+      <div class="box k-slides"><span class="where">スライド</span><b>作品を貼る</b><p>No.1〜No.40 の枠に、作品名・ひとこと・画像を入れる</p></div>
+      <div class="box k-gas"><span class="where">Apps Script</span><b>スライドを読む</b><p>メニュー②で、作品のある枠だけを読み取る</p></div>
+      <div class="box k-cloud"><span class="where">ドライブ</span><b>画像を置く</b><p>作品の画像を「リンクを知っている全員：閲覧者」で置く</p></div>
+      <div class="box k-gas"><span class="where">フォーム</span><b>選択肢に画像</b><p>Forms API で、投票の選択肢それぞれに画像を付ける</p></div>
+    </div>
+    <p>集計（メニュー③）もスライドから押します。1位が同票なら、同票の作品だけで決選投票のフォームをその場で作れます。</p>
+  </section>
+
+  <section aria-labelledby="h-why">
+    <h2 id="h-why">なぜ Cloud のプロジェクトが要るのか</h2>
+    <p>GAS のふつうの道具（<code>FormApp</code>）では、選択肢に画像を付けられません。付けられるのは <strong>Google Forms API</strong> だけです。Forms API は GAS の「高度なサービス」に入っていないので、<strong>Google Cloud のプロジェクトを作って GAS に紐づける</strong>必要があります。</p>
+    <p>もう1つの壁は画像の置き場所です。Forms のサーバは、渡した URL の画像を自分で取りに行きます。スライドの中の画像の URL は取りに行けませんでした。そこで、作品の画像をドライブに「リンクを知っている全員：閲覧者」で置き、その URL を渡しています。</p>
+    <div class="modes">
+      <div class="mode main">
+        <span class="tag gas">本命</span>
+        <h3>選択肢に画像</h3>
+        <ul>
+          <li>1つの質問の選択肢に、作品の画像が並ぶ</li>
+          <li>Cloud のプロジェクト・3つの API・同意画面が要る</li>
+        </ul>
+      </div>
+      <div class="mode">
+        <span class="tag slides">予備</span>
+        <h3>画像を上に並べる</h3>
+        <ul>
+          <li>作品の画像を質問の上に並べ、選択肢は「No.12　作品名」の文字だけ</li>
+          <li>Cloud の準備なしで動く。本命が失敗したときも自動でこの形になる</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-need">
+    <h2 id="h-need">用意するもの</h2>
+    <ul class="checks">
+      <li><span><strong>個人の Google アカウント</strong>。学校のアカウントだと、ほかの自治体の先生が共有スライドを開けないことがあります。手順はすべて同じアカウントで進めます</li>
+      <li><span>作品を集める Google スライド（そのアカウントのドライブに置く）</span></li>
+      <li><span>GAS のファイル2つ：<code>Code.gs</code> と <code>appsscript.json</code></span></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-steps">
+    <h2 id="h-steps">設定の手順</h2>
+
+    <div class="phase"><span class="tag cloud">Cloud 側</span><p class="meta">Google Cloud コンソール（console.cloud.google.com）で行います。お金はかかりません。支払い情報も求められません。</p></div>
+    <ol class="steps">
+      <li>
+        <span class="num">1</span>
+        <div class="step">
+          <h3>プロジェクトを作る</h3>
+          <p class="why">Forms API を使うための「入れ物」です。</p>
+          <ol>
+            <li>Google Cloud コンソールを個人アカウントで開く（初めてなら利用規約に同意）</li>
+            <li>画面上のプロジェクト名 → <span class="ui">新しいプロジェクト</span></li>
+            <li>名前を付けて（例：<code>GEG投票フォーム</code>）<span class="ui">作成</span>。組織は「なし」のまま</li>
+            <li>画面上で、そのプロジェクトが選ばれていることを確かめる</li>
+          </ol>
+        </div>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <div class="step">
+          <h3>API を3つ有効にする</h3>
+          <p class="why">プロジェクトを紐づけると、GAS が使う API はすべてこのプロジェクトで有効になっている必要があります。</p>
+          <p><span class="ui">API とサービス</span> → <span class="ui">ライブラリ</span> で、次の3つを検索して <span class="ui">有効にする</span>。</p>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>API</th><th>何に使うか</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Google Forms API</strong></td><td>選択肢に画像を付ける</td></tr>
+                <tr><td><strong>Google Slides API</strong></td><td>スライドを画像にする（集計の画面・予備の形）</td></tr>
+                <tr><td><strong>Google Drive API</strong></td><td>作品の画像をドライブに置き、リンクで見られるようにする</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note warn">1つでも足りないと、動かしたときに「GCP プロジェクト … への API（drive）の有効化中に権限が拒否されました」のように出ます。括弧の中の名前の API を有効にしてください。</p>
+        </div>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <div class="step">
+          <h3>同意画面を作る</h3>
+          <p class="why">GAS が「あなたのフォームを編集してよいか」を聞く画面です。</p>
+          <ol>
+            <li><span class="ui">API とサービス</span> → <span class="ui">OAuth 同意画面</span>（「Google Auth Platform」の画面に移ることがあります）→ <span class="ui">開始</span></li>
+            <li>アプリ名（例：<code>GEG投票フォーム</code>）とサポートのメールアドレス（自分）</li>
+            <li>対象は <strong>外部</strong></li>
+            <li>連絡先（自分）→ ポリシーに同意 → <span class="ui">作成</span></li>
+            <li><span class="ui">対象</span>（または <span class="ui">テストユーザー</span>）→ <span class="ui">ユーザーを追加</span> → <strong>自分のアドレスを追加</strong> → <span class="ui">保存</span></li>
+          </ol>
+          <p class="note">公開の申請はしません。「テスト中」のままで使えます。テストユーザーに入れた人だけが GAS を動かせるので、参加者がメニューを押しても許可の画面で止まります。テスト中の許可は7日ほどで切れることがあります。そのときはもう一度許可するだけです。</p>
+        </div>
+      </li>
+      <li>
+        <span class="num">4</span>
+        <div class="step">
+          <h3>プロジェクト番号を控える</h3>
+          <p><span class="ui">Cloud の概要</span> → <span class="ui">ダッシュボード</span>（または <span class="ui">IAM と管理</span> → <span class="ui">設定</span>）にある、12桁ほどの<strong>プロジェクト番号</strong>をコピーします。「プロジェクト ID」（英字の名前）ではない方です。</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="phase"><span class="tag slides">スライド側</span><p class="meta">作品を集めるスライドで行います。</p></div>
+    <ol class="steps" start="5">
+      <li>
+        <span class="num">5</span>
+        <div class="step">
+          <h3>スライドに GAS を入れる</h3>
+          <ol>
+            <li>スライドの <span class="ui">拡張機能</span> → <span class="ui">Apps Script</span></li>
+            <li>左の歯車 <span class="ui">プロジェクトの設定</span> →「「appsscript.json」マニフェスト ファイルをエディタで表示する」にチェック</li>
+            <li>エディタに戻り、<code>appsscript.json</code> の中身を下のものに貼り替える</li>
+            <li>エディタの <code>コード.gs</code> の中身を、下の「Code.gs」に貼り替える → 保存</li>
+          </ol>
+          <p class="note">GAS はスライドに付いています。スライドを別のフォルダへ動かしても一緒に動きます。スライドを <span class="ui">ファイル</span> → <span class="ui">コピーを作成</span> すると GAS ごとコピーされます（Cloud の紐づけはコピーされないので、コピーは「画像を上に並べる形」で動きます）。</p>
+        </div>
+      </li>
+      <li>
+        <span class="num">6</span>
+        <div class="step">
+          <h3>Cloud のプロジェクトを紐づける</h3>
+          <ol>
+            <li>Apps Script の <span class="ui">プロジェクトの設定</span> →「Google Cloud Platform（GCP）プロジェクト」→ <span class="ui">プロジェクトを変更</span></li>
+            <li>手順4のプロジェクト番号を貼る → <span class="ui">プロジェクトを設定</span></li>
+          </ol>
+        </div>
+      </li>
+      <li>
+        <span class="num">7</span>
+        <div class="step">
+          <h3>接続を確かめる</h3>
+          <ol>
+            <li>スライドの画面を<strong>再読み込み</strong>する → 上に「投票フォーム」メニューが出る</li>
+            <li><span class="ui">投票フォーム</span> → <span class="ui">Forms API の接続を確かめる</span></li>
+            <li>許可の画面：<span class="ui">続行</span> → アカウントを選ぶ →「Google で確認されていません」→ <span class="ui">詳細</span> → <span class="ui">（アプリ名）（安全ではないページ）に移動</span> → <span class="ui">許可</span></li>
+            <li>もう一度 <span class="ui">Forms API の接続を確かめる</span> を押す</li>
+            <li>「選択肢に画像を付けられました」と出れば成功。画像の URL の書き方3通り（lh3・thumbnail・uc）それぞれに ○ か × が出ます。<strong>○ が1つでもあれば使えます</strong></li>
+            <li>出てきたリンクでテストフォームを開き、選択肢に画像が付いているか目で見る。見たらテストフォームは消す</li>
+          </ol>
+          <p class="note warn">「Google で確認されていません」は、自分で作った GAS では必ず出ます。自分のアカウントで、自分が作ったプロジェクトなら進んで大丈夫です。人から渡された GAS のときは、中身を確かめてから許可してください。</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="h-manifest">
+    <h2 id="h-manifest">appsscript.json</h2>
+    <p>高度なサービスの Slides API と、GAS が使う権限をここで決めています。Forms API はここには書きません（手順6の紐づけと、<code>UrlFetchApp</code> からの呼び出しで使います）。</p>
+    <div class="code">
+      <div class="bar"><span>appsscript.json</span><span class="copied" aria-live="polite"></span><button class="copy" type="button" data-copy="manifest">コピー</button></div>
+<pre id="manifest">{
+  "timeZone": "Asia/Tokyo",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "dependencies": {
+    "enabledAdvancedServices": [
+      { "userSymbol": "Slides", "serviceId": "slides", "version": "v1" }
+    ]
+  },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/presentations",
+    "https://www.googleapis.com/auth/forms",
+    "https://www.googleapis.com/auth/forms.body",
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/script.container.ui"
+  ]
+}</pre>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>権限</th><th>使うところ</th></tr></thead>
+        <tbody>
+          <tr><td><code>presentations</code></td><td>スライドを読む・提出用の枠を作る</td></tr>
+          <tr><td><code>forms</code> ・ <code>forms.body</code></td><td>フォームを作る（FormApp）・選択肢に画像を付ける（Forms API）</td></tr>
+          <tr><td><code>drive</code></td><td>作品の画像をドライブのフォルダに置き、共有を「リンクを知っている全員：閲覧者」にする</td></tr>
+          <tr><td><code>script.external_request</code></td><td>Forms API とスライドの画像を <code>UrlFetchApp</code> で呼ぶ</td></tr>
+          <tr><td><code>script.container.ui</code></td><td>スライドのメニューと、完了・集計のダイアログ</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-code">
+    <h2 id="h-code">Code.gs</h2>
+    <p>GAS の本体です。この1ファイルだけで動きます。会に合わせて書き換えるのは、冒頭の <code>CONFIG</code> だけです。</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>設定</th><th>いまの値</th><th>意味</th></tr></thead>
+        <tbody>
+          <tr><td><code>FORM_TITLE</code></td><td>GEG All Hokkaido スタッフロゴ 投票</td><td>投票フォームの題名</td></tr>
+          <tr><td><code>RUNOFF_TITLE</code></td><td>GEG All Hokkaido スタッフロゴ 決選投票</td><td>決選投票フォームの題名</td></tr>
+          <tr><td><code>DEADLINE</code></td><td>20:35</td><td>説明のスライドに書く、貼り付けの締め切り</td></tr>
+          <tr><td><code>SLOT_COUNT</code></td><td>40</td><td>提出用スライドの枚数（No.1〜No.40）</td></tr>
+          <tr><td><code>VOTES_PER</code></td><td>10</td><td>作品何点ごとに1票ふやすか</td></tr>
+          <tr><td><code>IMAGE_FOLDER</code></td><td>デザインコンペ_投票用画像</td><td>選択肢の画像を置くドライブのフォルダ</td></tr>
+          <tr><td><code>USE_CHOICE_IMAGES</code></td><td>true</td><td><code>false</code> にすると、Cloud の準備なしの「画像を上に並べる形」だけで作る</td></tr>
+          <tr><td><code>ONE_RESPONSE_PER_USER</code></td><td>false</td><td><code>true</code> で1人1回。回答に Google のログインが要り、開けない人が出やすい</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">コードの中の「DEPLOY_GUIDE の Step 2・4」「Step 2-1」は、このページの手順2（API）と手順6（紐づけ）のことです。</p>
+    <div class="code">
+      <div class="bar"><span id="code-meta">Code.gs ・ 997行</span><span class="copied" aria-live="polite"></span><button class="copy" type="button" data-copy="codegs">コピー</button></div>
+<!-- Code.gs ここから（tools/embed_code.py が書き換える） -->
+<pre id="codegs" class="long">/**
+ * 作品スライド → 投票フォーム（GEG All Hokkaido デザインコンペ 2026-10-29 用）
+ *
+ * 参加者が1つの Google スライドに1人1枚ずつ作品を貼る。メニューを押すと、
+ * 全作品が並んだ投票フォーム（Google フォーム）ができて、回答用のリンクが出る。
+ *
+ * メニュー「投票フォーム」
+ *   ① 提出用スライドを用意する … 説明スライド＋ No.1〜No.40 の空きスライドを作る（本番前に1回）
+ *   ② 投票フォームを作る       … 作品のある番号だけ読み、フォームを作ってリンクを出す
+ *   ③ 集計する                 … いちばん新しいフォームの票を数えて順位を出す。1位が同票なら決選投票へ
+ *   Forms API の接続を確かめる … 選択肢に画像を付けられるかを、小さなテストフォームで試す
+ *
+ * 選択肢の画像は Forms API（REST）で付ける（FormApp には選択肢に画像を付ける命令がない）。
+ * Forms は画像を URL から取りに行くので、作品の画像をいったんドライブに置き、
+ * 「リンクを知っている全員：閲覧者」にしてから、その URL を渡す（スライドの画像の URL は Forms から開けなかった）。
+ * Cloud のプロジェクトが紐づいていない・API がエラーを返したときは、
+ * 「スライドの画像を上に並べ、最後に番号で選ぶ」形で作る。どちらでも投票はできる。
+ *
+ * 入れ方・前日リハの手順は DEPLOY_GUIDE.md、仕様は SPEC.md（同じフォルダ）。
+ */
+
+// =====================================================================
+// 設定（ここだけ書き換える）
+// =====================================================================
+
+const CONFIG = {
+  SLOT_COUNT: 40,                 // 提出用スライドの枚数（No.1〜No.40）
+  VOTES_PER: 10,                  // 10作品ごとに投票権を1つ（1〜10作品は1票、11〜20は2票…）
+  FORM_TITLE: 'GEG All Hokkaido スタッフロゴ 投票',
+  RUNOFF_TITLE: 'GEG All Hokkaido スタッフロゴ 決選投票',
+  DEADLINE: '20:35',              // 説明スライドに書く、貼り付けの締め切り
+  USE_CHOICE_IMAGES: true,        // 選択肢に画像を付ける（Forms API）。false なら画像を上に並べる形だけ
+  IMAGE_FOLDER: 'デザインコンペ_投票用画像',  // 選択肢の画像を置くドライブのフォルダ（会が終わったら消してよい）
+  ONE_RESPONSE_PER_USER: false,   // true で1人1回（回答に Google のログインが要る）
+  ASK_REASON: true,               // 「選んだ理由」（任意）を入れる
+  ASK_SATISFACTION: true,         // 「今日の会の満足度」（1〜5）を予選に入れる
+  THUMB_SIZE: 'MEDIUM',           // スライドを画像にする大きさ（MEDIUM＝幅800px）
+  TITLE_MAX: 30,                  // 作品名の最大文字数（これより長いと切る）
+  COMMENT_MAX: 40,                // 選択肢に添えるひとことの最大文字数
+};
+
+/** スライドの枠の目印（代替テキストのタイトル）。GAS はこれで枠を見つける */
+const TAG = {
+  GUIDE: 'slot-guide',
+  NO: 'slot-no',
+  TITLE: 'slot-title',
+  COMMENT: 'slot-comment',
+  DROP: 'slot-drop',
+};
+
+/** 作ったフォームの記録（スライドに紐づく保存場所） */
+const PROP = {
+  FORM_ID: 'lastFormId',
+  KIND: 'lastFormKind',          // 'prelim'（予選）か 'runoff'（決選）
+  VOTE_TITLE: 'lastVoteTitle',
+  WORKS: 'lastWorks',
+};
+
+const FORMS_API = 'https://forms.googleapis.com/v1/forms/';
+
+/**
+ * ドライブの画像を Forms に渡す URL の書き方。上から順に試し、Forms が受け取れたものを使う。
+ * どれが通るかは本物でしか分からないので、「Forms API の接続を確かめる」で3つとも試す。
+ */
+const IMAGE_URLS = [
+  { name: 'lh3', url: function (id) { return 'https://lh3.googleusercontent.com/d/' + id; } },
+  { name: 'thumbnail', url: function (id) { return 'https://drive.google.com/thumbnail?id=' + id + '&amp;sz=w1000'; } },
+  { name: 'uc', url: function (id) { return 'https://drive.google.com/uc?export=view&amp;id=' + id; } },
+];
+
+/** スライドを開いたときにメニューを出す */
+function onOpen() {
+  SlidesApp.getUi()
+    .createMenu('投票フォーム')
+    .addItem('① 提出用スライドを用意する', 'setupSlots')
+    .addItem('② 投票フォームを作る', 'createVoteForm')
+    .addItem('③ 集計する', 'showTally')
+    .addSeparator()
+    .addItem('Forms API の接続を確かめる', 'checkFormsApi')
+    .addToUi();
+}
+
+// =====================================================================
+// ① 提出用スライド
+// =====================================================================
+
+/** 説明スライドと No.1〜No.N の空きスライドを作る。すでにある番号は作らない */
+function setupSlots() {
+  try {
+    const pres = SlidesApp.getActivePresentation();
+    const existing = {};
+    let hasGuide = false;
+    pres.getSlides().forEach(function (slide) {
+      const no = parseNo_(textOf_(findShape_(slide, TAG.NO)));
+      if (no) existing[no] = true;
+      if (findShape_(slide, TAG.GUIDE)) hasGuide = true;
+    });
+
+    if (!hasGuide) buildGuideSlide_(pres.insertSlide(0, SlidesApp.PredefinedLayout.BLANK), pres);
+    let added = 0;
+    for (let no = 1; no &lt;= CONFIG.SLOT_COUNT; no++) {
+      if (existing[no]) continue;
+      buildSlotSlide_(pres.appendSlide(SlidesApp.PredefinedLayout.BLANK), no);
+      added++;
+    }
+
+    const message = added === 0 &amp;&amp; hasGuide
+      ? 'No.1〜No.' + CONFIG.SLOT_COUNT + ' はもうそろっています。'
+      : (hasGuide ? '' : '1枚目に説明のスライドを入れました。\n') +
+        '提出用のスライドを ' + added + ' 枚足しました（No.1〜No.' + CONFIG.SLOT_COUNT + '）。\n' +
+        'もとからある白紙のスライドは、いらなければ消してください。';
+    SlidesApp.getUi().alert(message);
+    return { success: true, message: message, added: added };
+  } catch (e) {
+    return fail_('提出用のスライドを作れませんでした', e, true);
+  }
+}
+
+/** 1枚目の説明スライド */
+function buildGuideSlide_(slide, pres) {
+  const w = pres.getPageWidth();
+  const head = slide.insertTextBox('提出のしかた（締め切り ' + CONFIG.DEADLINE + '）', 40, 24, w - 80, 44);
+  head.setTitle(TAG.GUIDE);
+  style_(head, 26, true);
+
+  const steps = [
+    '1. 空いている番号のスライドを1枚えらぶ',
+    '2. まず「作品名」を書く（その番号を取った印になります）',
+    '3. Gemini で作った画像を貼る',
+    '　　PC：画像を右クリック →［画像をコピー］→ スライドに貼り付け',
+    '　　iPad・スマホ：画像を保存 →［挿入］→［画像］→［アップロード］',
+    '4. 「ひとこと」に込めた思いを1行で',
+    '',
+    '・名前は書かないでください（作品で選ぶため）',
+    '・ほかの人のスライドはさわらないでください',
+    '・上の「投票フォーム」メニューは運営用です',
+  ].join('\n');
+  style_(slide.insertTextBox(steps, 40, 84, w - 80, 300), 16, false);
+}
+
+/** 提出用スライド1枚（左に画像の場所、右に作品名とひとこと） */
+function buildSlotSlide_(slide, no) {
+  const noBox = slide.insertTextBox('No.' + no, 28, 14, 200, 44);
+  noBox.setTitle(TAG.NO);
+  style_(noBox, 26, true);
+
+  const drop = slide.insertShape(SlidesApp.ShapeType.RECTANGLE, 40, 66, 300, 300);
+  drop.setTitle(TAG.DROP);
+  drop.getFill().setSolidFill('#F5F5F5');
+  drop.getBorder().setWeight(1).setDashStyle(SlidesApp.DashStyle.DASH).getLineFill().setSolidFill('#9E9E9E');
+  drop.getText().setText('ここに画像を貼る\n（正方形がおすすめ）');
+  style_(drop, 14, false, '#757575');
+  drop.getText().getParagraphStyle().setParagraphAlignment(SlidesApp.ParagraphAlignment.CENTER);
+  drop.setContentAlignment(SlidesApp.ContentAlignment.MIDDLE);
+
+  style_(slide.insertTextBox('作品名', 370, 62, 310, 26), 13, true, '#424242');
+  inputBox_(slide, TAG.TITLE, 370, 90, 310, 56, 22, true);
+  style_(slide.insertTextBox('ひとこと（込めた思いを1行で）', 370, 160, 310, 26), 13, true, '#424242');
+  inputBox_(slide, TAG.COMMENT, 370, 188, 310, 110, 14, false);
+  style_(slide.insertTextBox('名前は書かないでください', 370, 330, 310, 24), 11, false, '#757575');
+}
+
+/** 参加者が書き込む枠（白地に細い枠線） */
+function inputBox_(slide, tag, left, top, width, height, fontSize, bold) {
+  const box = slide.insertShape(SlidesApp.ShapeType.RECTANGLE, left, top, width, height);
+  box.setTitle(tag);
+  box.getFill().setSolidFill('#FFFFFF');
+  box.getBorder().setWeight(1).getLineFill().setSolidFill('#BDBDBD');
+  box.setContentAlignment(SlidesApp.ContentAlignment.TOP);
+  style_(box, fontSize, bold, '#202124');
+  return box;
+}
+
+// =====================================================================
+// ② 投票フォーム（予選）
+// =====================================================================
+
+/** メニュー「② 投票フォームを作る」 */
+function createVoteForm() {
+  const ui = SlidesApp.getUi();
+  try {
+    const props = PropertiesService.getDocumentProperties();
+    if (props.getProperty(PROP.FORM_ID)) {
+      const again = ui.alert('投票フォームを作る',
+        '前に作ったフォームがあります。新しく作りますか？\n（前のフォームはそのまま残ります。③ の集計は新しい方を数えます）',
+        ui.ButtonSet.YES_NO);
+      if (again !== ui.Button.YES) return { success: false, message: 'やめました' };
+    }
+
+    const pres = SlidesApp.getActivePresentation();
+    const read = readSlots_(pres);
+    if (read.works.length === 0) {
+      const msg = '作品が貼られたスライドがありません。\n（画像のある No. のスライドだけを作品として読みます）';
+      ui.alert(msg);
+      return { success: false, message: msg };
+    }
+
+    const votes = askVotes_(ui, read.works.length);
+    if (!votes) return { success: false, message: 'やめました' };
+
+    // 画像を貼ったスライドの「ここに画像を貼る」を消す（集計の画面やスライドの画像に写らないように）
+    read.works.forEach(function (w) {
+      const drop = findShape_(w.slide, TAG.DROP);
+      if (drop) drop.remove();
+    });
+
+    const res = makeForm_({
+      kind: 'prelim',
+      pres: pres,
+      works: read.works,
+      votes: votes,
+      title: CONFIG.FORM_TITLE,
+      description: 'GEG All Hokkaido のスタッフロゴを決める投票です。\n' +
+        '作品は ' + read.works.length + ' 点。いいと思う作品を ' + votesText_(votes) + ' 選んでください。\n' +
+        '作者の名前はのせていません。作品で選んでください。',
+    });
+    res.noImage = read.noImage;
+    showLinkDialog_(res, '投票フォームができました');
+    return res;
+  } catch (e) {
+    return fail_('投票フォームを作れませんでした', e, true);
+  }
+}
+
+/** 予選の票数を聞く。空のまま OK なら「10作品ごとに1票」の数。やめたら 0 */
+function askVotes_(ui, count) {
+  const def = defaultVotes_(count);
+  const r = ui.prompt('投票フォームを作る',
+    '作品は ' + count + ' 点です。1人 ' + def + ' 票にします（' + CONFIG.VOTES_PER + '作品ごとに1票）。\n' +
+    '変えるときは数字を入れてください。空のまま OK なら ' + def + ' 票です。\n\n' +
+    'OK を押すと1〜2分かかります。終わると画面にリンクが出ます。',
+    ui.ButtonSet.OK_CANCEL);
+  if (r.getSelectedButton() !== ui.Button.OK) return 0;
+  const text = toHalfWidth_(String(r.getResponseText() || '').trim());
+  if (!text) return def;
+  const n = Number(text);
+  if (!(Number.isInteger(n) &amp;&amp; n &gt;= 1 &amp;&amp; n &lt;= count)) {
+    ui.alert('票数は 1〜' + count + ' の数字で入れてください。もう一度メニューから押してください。');
+    return 0;
+  }
+  return n;
+}
+
+/** 10作品ごとに1票（作品数÷10 の切り上げ・最低1票） */
+function defaultVotes_(count) {
+  return Math.max(1, Math.ceil(count / CONFIG.VOTES_PER));
+}
+
+/**
+ * 提出用スライドを読む。
+ * 画像のある番号だけを作品にする。作品名・ひとことだけで画像がない番号は noImage に入れる。
+ * 同じ番号が2枚あったら（スライドの複製）、2枚目を「No.12-2」にする。
+ * @return {{works: Array&lt;Object&gt;, noImage: string[]}}
+ */
+function readSlots_(pres) {
+  const works = [];
+  const noImage = [];
+  const seen = {};
+  pres.getSlides().forEach(function (slide, index) {
+    const no = parseNo_(textOf_(findShape_(slide, TAG.NO)));
+    if (!no) return;
+    seen[no] = (seen[no] || 0) + 1;
+    const key = 'No.' + no + (seen[no] &gt; 1 ? '-' + seen[no] : '');
+    const title = oneLine_(textOf_(findShape_(slide, TAG.TITLE)), CONFIG.TITLE_MAX);
+    const comment = oneLine_(textOf_(findShape_(slide, TAG.COMMENT)), 200);
+    const images = slide.getImages();
+    if (images.length === 0) {
+      if (title || comment) noImage.push(key);
+      return;
+    }
+    works.push({
+      key: key, no: no, order: index, title: title, comment: comment,
+      pageId: slide.getObjectId(), slide: slide,
+    });
+  });
+  works.sort(function (a, b) { return a.no - b.no || a.order - b.order; });
+  return { works: works, noImage: noImage };
+}
+
+// =====================================================================
+// フォームを作る（予選・決選で共通）
+// =====================================================================
+
+/**
+ * フォームを作り、選択肢に画像を付け、記録してリンクを返す。
+ * 選択肢に画像が付けば、それで終わり（スライドを画像にする手間を省く）。
+ * 付かなければ、スライドの画像をフォームの上に並べる形にする。
+ * @param {{kind:string, pres:Object, works:Object[], votes:number, title:string, description:string}} opts
+ * @return {Object} ダイアログにそのまま渡せる結果（Form などのオブジェクトは入れない）
+ */
+function makeForm_(opts) {
+  const built = buildForm_(opts);
+  const form = built.form;
+
+  let mode = 'list';
+  let modeNote = '選択肢に画像は付けず、画像を上に並べる形にしました（設定で止めています）。';
+  let thumbFailed = [];
+  const r = CONFIG.USE_CHOICE_IMAGES ? attachWithDrive_(opts, form.getId(), built.voteTitle) : null;
+  if (r &amp;&amp; r.ok) {
+    mode = 'choice';
+    modeNote = '選択肢に画像を付けました（' + r.source + ' 形式の URL）。';
+  } else {
+    thumbFailed = addImageList_(form, opts);
+    if (r) modeNote = '選択肢に画像を付けられなかったので、画像を上に並べる形にしました。投票はこのまま使えます。\n理由：' + explainApiError_(r);
+  }
+  publish_(form);
+
+  const id = form.getId();
+  const props = PropertiesService.getDocumentProperties();
+  const record = {};
+  record[PROP.FORM_ID] = id;
+  record[PROP.KIND] = opts.kind;
+  record[PROP.VOTE_TITLE] = built.voteTitle;
+  record[PROP.WORKS] = JSON.stringify(opts.works.map(storedWork_));
+  props.setProperties(record);
+
+  const url = form.getPublishedUrl();
+  return {
+    success: true,
+    message: 'フォームを作りました',
+    kind: opts.kind,
+    formId: id,
+    responderUrl: url,
+    shortUrl: shortUrl_(form, url),
+    editUrl: form.getEditUrl(),
+    count: opts.works.length,
+    votes: opts.votes,
+    mode: mode,
+    modeNote: modeNote,
+    thumbFailed: thumbFailed,
+  };
+}
+
+/** FormApp でフォームの骨組みを作る（投票の質問・理由・満足度。画像はまだ入れない） */
+function buildForm_(opts) {
+  const form = FormApp.create(opts.title);
+  form.setDescription(opts.description)
+    .setConfirmationMessage('投票ありがとうございました！ 結果は画面で発表します。')
+    .setShowLinkToRespondAgain(false)
+    .setAllowResponseEdits(false)
+    .setLimitOneResponsePerUser(CONFIG.ONE_RESPONSE_PER_USER);
+
+  const voteTitle = opts.votes === 1 ? '投票（1つ選んでください）' : '投票（' + opts.votes + 'つまで選べます）';
+  const values = opts.works.map(labelShort_);
+  if (opts.votes === 1) {
+    form.addMultipleChoiceItem().setTitle(voteTitle).setChoiceValues(values).setRequired(true);
+  } else {
+    const validation = FormApp.createCheckboxValidation()
+      .setHelpText(opts.votes + 'つまで選べます')
+      .requireSelectAtMost(opts.votes)
+      .build();
+    form.addCheckboxItem().setTitle(voteTitle).setChoiceValues(values).setValidation(validation).setRequired(true);
+  }
+  if (CONFIG.ASK_REASON) form.addParagraphTextItem().setTitle('選んだ理由（書かなくても大丈夫です）');
+  if (opts.kind === 'prelim' &amp;&amp; CONFIG.ASK_SATISFACTION) {
+    form.addScaleItem().setTitle('今日の会の満足度').setBounds(1, 5).setLabels('いまひとつ', 'とても良い');
+  }
+  return { form: form, voteTitle: voteTitle };
+}
+
+/**
+ * 選択肢に画像を付けられなかったときの形：スライドの画像を、投票の質問より上に並べる。
+ * @return {string[]} スライドの画像が取れなかった作品
+ */
+function addImageList_(form, opts) {
+  const presId = opts.pres.getId();
+  opts.pres.saveAndClose();   // スライドの書き換え（「ここに画像を貼る」を消したこと）を確定させてから画像にする
+  const thumbFailed = [];
+  const added = [];
+  opts.works.forEach(function (w) {
+    let thumb = null;
+    try {
+      thumb = fetchThumbnail_(presId, w.pageId);
+    } catch (e) {
+      Logger.log('スライドの画像が取れない ' + w.key + ': ' + e.message);
+      thumbFailed.push(w.key);
+    }
+    added.push(thumb
+      ? form.addImageItem().setTitle(labelShort_(w)).setHelpText(w.comment || '').setImage(thumb.blob).setWidth(600)
+      : form.addSectionHeaderItem().setTitle(labelShort_(w))
+        .setHelpText((w.comment ? w.comment + '\n' : '') + '（画像を取り込めませんでした。スライドで見てください）'));
+  });
+  added.forEach(function (item, i) { form.moveItem(item, i); });
+  return thumbFailed;
+}
+
+/** 回答を受け付ける状態にする（2026年からの「公開」の仕組みがあれば公開する） */
+function publish_(form) {
+  try {
+    if (typeof form.setPublished === 'function') form.setPublished(true);
+  } catch (e) {
+    Logger.log('setPublished: ' + e.message);
+  }
+  form.setAcceptingResponses(true);
+}
+
+/** 短いリンク。作れない・形が怪しいときは空 */
+function shortUrl_(form, url) {
+  try {
+    const s = String(form.shortenFormUrl(url) || '');
+    return /^https?:\/\//.test(s) ? s : '';
+  } catch (e) {
+    Logger.log('shortenFormUrl: ' + e.message);
+    return '';
+  }
+}
+
+// =====================================================================
+// Forms API：選択肢に画像を付ける
+// =====================================================================
+
+/**
+ * 作品の画像をドライブに置いて、選択肢に付ける。
+ * Forms API が使えない（Cloud の準備がない）ときは、ドライブに置く前にやめる。
+ * @return {{ok:boolean, source?:string, code?:number, message?:string}}
+ */
+function attachWithDrive_(opts, formId, voteTitle) {
+  const got = formsApi_('get', FORMS_API + formId, ScriptApp.getOAuthToken());
+  if (!got.ok) return got;
+  const placed = uploadImages_(opts.pres, opts.works);
+  if (placed === 0) return { ok: false, code: 0, message: '作品の画像をドライブに置けませんでした' };
+  Utilities.sleep(2000);   // 「リンクを知っている全員」が効くまで少し待つ
+  return attachChoiceImages_(formId, voteTitle, opts.works, IMAGE_URLS, got.body);
+}
+
+/**
+ * 各作品のいちばん大きい画像を、ドライブのフォルダに置いて「リンクを知っている全員：閲覧者」にする。
+ * 置いたファイルの ID を w.fileId に入れる。会が終わったらフォルダごと消してよい。
+ * @return {number} 置けた枚数
+ */
+function uploadImages_(pres, works) {
+  const folder = imageFolder_();
+  let placed = 0;
+  works.forEach(function (w) {
+    try {
+      const slide = w.slide || pres.getSlideById(w.pageId);
+      const img = slide ? largestImage_(slide.getImages()) : null;
+      if (!img) return;
+      const file = folder.createFile(img.getBlob().setName(w.key));
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      w.fileId = file.getId();
+      placed++;
+    } catch (e) {
+      Logger.log('ドライブに置けない ' + w.key + ': ' + e.message);
+    }
+  });
+  return placed;
+}
+
+/** 選択肢の画像を置くフォルダ（なければ作る） */
+function imageFolder_() {
+  const it = DriveApp.getFoldersByName(CONFIG.IMAGE_FOLDER);
+  return it.hasNext() ? it.next() : DriveApp.createFolder(CONFIG.IMAGE_FOLDER);
+}
+
+/**
+ * 投票の質問の選択肢に、ドライブに置いた作品の画像を付ける。
+ * URL の書き方（formats）を上から順に試し、Forms が受け取れたところで終わる。
+ * 選択肢の文字は「No.12　作品名｜ひとこと」にする（上に画像を並べないので、ひとことをここに移す）。
+ * @param {Array&lt;{name:string, url:function(string):string}&gt;} formats
+ * @param {Object=} formBody Forms API で読んだフォーム（なければここで読む）
+ * @return {{ok:boolean, source?:string, code?:number, message?:string}}
+ */
+function attachChoiceImages_(formId, voteTitle, works, formats, formBody) {
+  const token = ScriptApp.getOAuthToken();
+  let body = formBody;
+  if (!body) {
+    const got = formsApi_('get', FORMS_API + formId, token);
+    if (!got.ok) return got;
+    body = got.body;
+  }
+
+  let index = -1;
+  let item = null;
+  (body.items || []).forEach(function (it, i) {
+    if (it.title === voteTitle &amp;&amp; it.questionItem) { index = i; item = it; }
+  });
+  if (!item) return { ok: false, code: 0, message: '投票の質問が見つかりません' };
+
+  // 選択肢と作品は先頭の「No.12」で結びつける。Forms が選択肢の文字の空白などを
+  // 置き換えて返すことがあり、文字全体の一致では結びつかなかった（2026-10-24 本番の確認で発生）
+  const byKey = {};
+  works.forEach(function (w) { byKey[w.key] = w; });
+  const sourceOptions = item.questionItem.question.choiceQuestion.options || [];
+  const matched = sourceOptions.filter(function (o) { const w = byKey[keyOf_(o.value)]; return w &amp;&amp; w.fileId; }).length;
+  if (matched === 0) {
+    return {
+      ok: false, code: 0,
+      message: '選択肢と作品を結びつけられませんでした（Forms から返った選択肢：' +
+        sourceOptions.slice(0, 3).map(function (o) { return JSON.stringify(o.value); }).join(' / ') + '）',
+    };
+  }
+
+  let last = null;
+  for (let a = 0; a &lt; formats.length; a++) {
+    const options = sourceOptions.map(function (o) {
+      const w = byKey[keyOf_(o.value)];
+      const opt = { value: w ? labelLong_(w) : o.value };
+      if (w &amp;&amp; w.fileId) opt.image = { sourceUri: formats[a].url(w.fileId), altText: opt.value };
+      return opt;
+    });
+    const newItem = JSON.parse(JSON.stringify(item));
+    newItem.questionItem.question.choiceQuestion.options = options;
+    const res = formsApi_('post', FORMS_API + formId + ':batchUpdate', token, {
+      requests: [{
+        updateItem: {
+          item: newItem,
+          location: { index: index },
+          updateMask: 'questionItem.question.choiceQuestion.options',
+        },
+      }],
+    });
+    if (res.ok) return { ok: true, source: formats[a].name };
+    last = res;
+    Logger.log('選択肢の画像（' + formats[a].name + ' 形式）: ' + res.code + ' ' + res.message);
+    if (res.code === 401 || res.code === 403 || res.code === 404) break;   // 設定の問題。書き方を変えても同じ
+  }
+  return last;
+}
+
+/** Forms API を呼ぶ。失敗も戻り値で返す */
+function formsApi_(method, url, token, payload) {
+  const params = {
+    method: method,
+    headers: { Authorization: 'Bearer ' + token },
+    muteHttpExceptions: true,
+  };
+  if (payload) {
+    params.contentType = 'application/json';
+    params.payload = JSON.stringify(payload);
+  }
+  try {
+    const r = UrlFetchApp.fetch(url, params);
+    const code = r.getResponseCode();
+    let body = {};
+    try { body = JSON.parse(r.getContentText() || '{}'); } catch (e) { body = {}; }
+    const ok = code &gt;= 200 &amp;&amp; code &lt; 300;
+    return { ok: ok, code: code, body: body, message: ok ? '' : ((body.error &amp;&amp; body.error.message) || ('HTTP ' + code)) };
+  } catch (e) {
+    return { ok: false, code: 0, body: {}, message: e.message };
+  }
+}
+
+/** Forms API の失敗を、直し方の分かる言葉にする */
+function explainApiError_(r) {
+  const m = String((r &amp;&amp; r.message) || '');
+  if (/has not been used|is disabled|SERVICE_DISABLED/i.test(m)) {
+    return 'Forms API が有効になっていないか、Cloud のプロジェクトが紐づいていない（DEPLOY_GUIDE の Step 2・4）。' + m;
+  }
+  if (r &amp;&amp; r.code === 403 &amp;&amp; /insufficient|scope/i.test(m)) {
+    return '許可の範囲が足りない（appsscript.json を貼り直して、もう一度許可する）。' + m;
+  }
+  if (r &amp;&amp; r.code === 400 &amp;&amp; /fetch image/i.test(m)) {
+    return 'Forms のサーバが、その URL から画像を取りに行けなかった。' + m;
+  }
+  if (r &amp;&amp; r.code === 400) return 'Forms が画像の URL を受け取れなかった。' + m;
+  return (r &amp;&amp; r.code ? 'HTTP ' + r.code + '：' : '') + m;
+}
+
+// =====================================================================
+// スライドを画像にする（Slides API の高度なサービス）
+// =====================================================================
+
+/** スライド1枚の画像の URL（PNG・30分有効）。混んでいる（429）ときは待ってやり直す */
+function thumbnailUrl_(presId, pageId) {
+  return withRetry_(function () {
+    return Slides.Presentations.Pages.getThumbnail(presId, pageId, {
+      'thumbnailProperties.thumbnailSize': CONFIG.THUMB_SIZE,
+      'thumbnailProperties.mimeType': 'PNG',
+    });
+  }).contentUrl;
+}
+
+/** スライド1枚の画像（URL と、フォームに入れる画像そのもの） */
+function fetchThumbnail_(presId, pageId) {
+  const url = thumbnailUrl_(presId, pageId);
+  return { url: url, blob: fetchBlob_(url) };
+}
+
+/** 画像を取る。そのままで断られたら、自分の許可を付けてもう一度 */
+function fetchBlob_(url) {
+  let r = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+  if (r.getResponseCode() !== 200) {
+    r = UrlFetchApp.fetch(url, {
+      headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+      muteHttpExceptions: true,
+    });
+  }
+  if (r.getResponseCode() !== 200) throw new Error('画像を取れませんでした（HTTP ' + r.getResponseCode() + '）');
+  return r.getBlob().setName('slide.png');
+}
+
+/** 割り当て超え（1分60回）のときだけ、1・2・4・8秒と待ってやり直す */
+function withRetry_(fn) {
+  for (let i = 0; ; i++) {
+    try {
+      return fn();
+    } catch (e) {
+      if (i &gt;= 4 || !/429|quota|rate limit|RESOURCE_EXHAUSTED/i.test(e.message)) throw e;
+      Utilities.sleep(1000 * Math.pow(2, i));
+    }
+  }
+}
+
+/** スライドに貼られた画像のうち、いちばん大きいもの（＝作品）。なければ null */
+function largestImage_(images) {
+  let best = null;
+  images.forEach(function (img) {
+    if (!best || img.getWidth() * img.getHeight() &gt; best.getWidth() * best.getHeight()) best = img;
+  });
+  return best;
+}
+
+// =====================================================================
+// ③ 集計と決選投票
+// =====================================================================
+
+/** メニュー「③ 集計する」 */
+function showTally() {
+  try {
+    const t = tally_();
+    if (!t.success) {
+      SlidesApp.getUi().alert(t.message);
+      return t;
+    }
+    showTallyDialog_(t);
+    return t;
+  } catch (e) {
+    return fail_('集計できませんでした', e, true);
+  }
+}
+
+/**
+ * いちばん新しいフォームの票を数える。
+ * 選択肢の文字の先頭「No.12」（重複なら「No.12-2」）で作品を見分ける。
+ * @return {{success:boolean, message:string, kind?:string, responses?:number,
+ *           ranking?:Array&lt;{key:string,no:number,title:string,votes:number}&gt;, tied?:string[], winner?:string}}
+ */
+function tally_() {
+  const props = PropertiesService.getDocumentProperties();
+  const formId = props.getProperty(PROP.FORM_ID);
+  if (!formId) return { success: false, message: 'まだ投票フォームを作っていません（先に ② を押してください）。' };
+  const voteTitle = props.getProperty(PROP.VOTE_TITLE);
+  const works = JSON.parse(props.getProperty(PROP.WORKS) || '[]');
+  const kind = props.getProperty(PROP.KIND) || 'prelim';
+
+  const counts = {};
+  works.forEach(function (w) { counts[w.key] = 0; });
+  const responses = FormApp.openById(formId).getResponses();
+  responses.forEach(function (r) {
+    r.getItemResponses().forEach(function (ir) {
+      if (ir.getItem().getTitle() !== voteTitle) return;
+      const ans = ir.getResponse();
+      (Array.isArray(ans) ? ans : [ans]).forEach(function (v) {
+        const key = keyOf_(v);
+        if (key &amp;&amp; Object.prototype.hasOwnProperty.call(counts, key)) counts[key]++;
+      });
+    });
+  });
+
+  const ranking = works.map(function (w) {
+    return { key: w.key, no: w.no, title: w.title, votes: counts[w.key], pageId: w.pageId };
+  }).sort(function (a, b) { return b.votes - a.votes || a.no - b.no || (a.key &lt; b.key ? -1 : 1); });
+
+  const top = ranking.length ? ranking[0].votes : 0;
+  if (top === 0) {
+    return { success: false, message: 'まだ票が入っていません（回答 ' + responses.length + ' 件）。' };
+  }
+  const leaders = ranking.filter(function (r) { return r.votes === top; }).map(function (r) { return r.key; });
+  return {
+    success: true,
+    message: '集計しました',
+    kind: kind,
+    responses: responses.length,
+    ranking: ranking,
+    tied: leaders.length &gt; 1 ? leaders : [],
+    winner: leaders.length === 1 ? leaders[0] : '',
+  };
+}
+
+/**
+ * 集計のダイアログのボタン「決選投票フォームを作る」から呼ぶ。
+ * 同票の作品だけで、1人1票のフォームを作る。決選でも同票なら、もう一度呼べる。
+ * @param {string[]} keys 同票の作品（"No.12" など）
+ */
+function createRunoffForm(keys) {
+  try {
+    const props = PropertiesService.getDocumentProperties();
+    const all = JSON.parse(props.getProperty(PROP.WORKS) || '[]');
+    const want = {};
+    (keys || []).forEach(function (k) { want[k] = true; });
+    const works = all.filter(function (w) { return want[w.key]; });
+    if (works.length &lt; 2) return { success: false, message: '決選投票にする作品が2つ以上ありません。' };
+
+    return makeForm_({
+      kind: 'runoff',
+      pres: SlidesApp.getActivePresentation(),
+      works: works,
+      votes: 1,
+      title: CONFIG.RUNOFF_TITLE,
+      description: '1位が同票だった ' + works.length + ' 作品の決選投票です。\nいちばんいいと思う作品を1つ選んでください。',
+    });
+  } catch (e) {
+    return fail_('決選投票フォームを作れませんでした', e, false);
+  }
+}
+
+// =====================================================================
+// Forms API の接続を確かめる（Cloud の準備のあとに1回）
+// =====================================================================
+
+/**
+ * 小さなテストフォームを作り、1枚目のスライドの画像をドライブに置いて、
+ * URL の書き方3通り（lh3・thumbnail・uc）でそれぞれ選択肢に付けられるかを試す。
+ * 本番は、ここで ○ になった書き方のうち上のものが使われる。
+ */
+function checkFormsApi() {
+  const ui = SlidesApp.getUi();
+  try {
+    const pres = SlidesApp.getActivePresentation();
+    const slide = pres.getSlides()[0];
+    if (!slide) {
+      ui.alert('スライドが1枚もありません。');
+      return { success: false, message: 'スライドがない' };
+    }
+
+    const form = FormApp.create('【テスト】Forms API の確認');
+    const voteTitle = 'テスト（見たらこのフォームは消してください）';
+    const works = IMAGE_URLS.map(function (u, i) {
+      return { key: 'No.' + (i + 1), no: i + 1, title: u.name + ' 形式', comment: '' };
+    });
+    form.addCheckboxItem().setTitle(voteTitle).setChoiceValues(works.map(labelShort_));
+
+    const got = formsApi_('get', FORMS_API + form.getId(), ScriptApp.getOAuthToken());
+    if (!got.ok) {
+      const msg = '× Forms API に届きませんでした（本番は画像を上に並べる形で動きます）。\n\n' + explainApiError_(got) +
+        '\n\nこの文を全文そのまま送ってください。';
+      ui.alert(msg);
+      return { success: false, message: msg };
+    }
+
+    // 1枚目のスライドを画像にして、ドライブに置く（画像を貼っていないスライドでも試せる）
+    const blob = fetchThumbnail_(pres.getId(), slide.getObjectId()).blob;
+    const file = imageFolder_().createFile(blob.setName('接続の確認'));
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    works.forEach(function (w) { w.fileId = file.getId(); });
+    Utilities.sleep(2000);
+
+    const lines = IMAGE_URLS.map(function (u) {
+      const r = attachChoiceImages_(form.getId(), voteTitle, works, [u]);
+      return (r.ok ? '○ ' : '× ') + u.name + ' 形式' + (r.ok ? '' : '：' + explainApiError_(r));
+    });
+    const okAny = lines.some(function (l) { return l.indexOf('○') === 0; });
+    const message = (okAny
+      ? '選択肢に画像を付けられました。'
+      : '選択肢に画像を付けられませんでした（本番は画像を上に並べる形で動きます）。') +
+      '\n\n' + lines.join('\n') +
+      (okAny ? '\n\nテストフォームを開いて、選択肢に画像が付いているか見てください：\n' + form.getEditUrl() : '') +
+      '\n\nこの文を全文そのまま送ってください。見たら、マイドライブの「【テスト】Forms API の確認」は消してください。';
+    ui.alert(message);
+    return { success: okAny, message: message, editUrl: form.getEditUrl() };
+  } catch (e) {
+    return fail_('確かめられませんでした', e, true);
+  }
+}
+
+// =====================================================================
+// ダイアログ
+// =====================================================================
+
+/** フォームができたときのダイアログ（回答用のリンクをコピーできる） */
+function showLinkDialog_(res, heading) {
+  const html = dialogPage_(linkBlock_(res, heading) + '&lt;div class="row"&gt;&lt;button class="sub" onclick="google.script.host.close()"&gt;閉じる&lt;/button&gt;&lt;/div&gt;');
+  SlidesApp.getUi().showModalDialog(HtmlService.createHtmlOutput(html).setWidth(720).setHeight(520), heading);
+}
+
+/** リンクの部分（予選・決選で共通）。ダイアログの外からも使えるよう文字列で返す */
+function linkBlock_(res, heading) {
+  const parts = [];
+  parts.push('&lt;h2&gt;' + esc_(heading) + '&lt;/h2&gt;');
+  parts.push('&lt;p class="note"&gt;作品 ' + res.count + ' 点・1人 ' + res.votes + ' 票&lt;/p&gt;');
+  parts.push('&lt;p class="label"&gt;回答用のリンク（Meet のチャットに貼る）&lt;/p&gt;');
+  parts.push('&lt;div class="url"&gt;&lt;input id="u0" value="' + esc_(res.responderUrl) + '" readonly&gt;' +
+    '&lt;button onclick="copyUrl(\'u0\', this)"&gt;コピー&lt;/button&gt;&lt;/div&gt;');
+  if (res.shortUrl) {
+    parts.push('&lt;p class="label"&gt;短いリンク（前日リハで開けるか確かめたものだけ使う）&lt;/p&gt;');
+    parts.push('&lt;div class="url"&gt;&lt;input id="u1" value="' + esc_(res.shortUrl) + '" readonly&gt;' +
+      '&lt;button class="sub" onclick="copyUrl(\'u1\', this)"&gt;コピー&lt;/button&gt;&lt;/div&gt;');
+  }
+  parts.push('&lt;p class="' + (res.mode === 'choice' ? 'note' : 'warn') + '"&gt;' + esc_(res.modeNote).replace(/\n/g, '&lt;br&gt;') + '&lt;/p&gt;');
+  if (res.thumbFailed &amp;&amp; res.thumbFailed.length) {
+    parts.push('&lt;p class="warn"&gt;画像を取り込めなかった作品：' + esc_(res.thumbFailed.join('・')) + '（名前だけ入っています）&lt;/p&gt;');
+  }
+  if (res.noImage &amp;&amp; res.noImage.length) {
+    parts.push('&lt;p class="warn"&gt;作品名だけで画像がない番号：' + esc_(res.noImage.join('・')) + '（フォームに入れていません）&lt;/p&gt;');
+  }
+  parts.push('&lt;p class="note"&gt;&lt;a href="' + esc_(res.editUrl) + '" target="_blank"&gt;編集画面でフォームを開く&lt;/a&gt;&lt;/p&gt;');
+  return parts.join('\n');
+}
+
+/** 集計のダイアログ（1位を大きく。同票なら決選投票のボタン） */
+function showTallyDialog_(t) {
+  const presId = SlidesApp.getActivePresentation().getId();
+  const byKey = {};
+  t.ranking.forEach(function (r) { byKey[r.key] = r; });
+  const featured = t.winner ? [t.winner] : t.tied.slice(0, 4);
+
+  const parts = [];
+  parts.push('&lt;h2&gt;' + (t.kind === 'runoff' ? '決選投票の結果' : '投票の結果') + '（回答 ' + t.responses + ' 件）&lt;/h2&gt;');
+  if (t.winner) {
+    const w = byKey[t.winner];
+    parts.push('&lt;p class="big"&gt;1位　' + esc_(labelShort_(w)) + '　' + w.votes + ' 票&lt;/p&gt;');
+  } else {
+    parts.push('&lt;p class="big warn"&gt;1位が同票です：' + esc_(t.tied.join('・')) + '（' + byKey[t.tied[0]].votes + ' 票ずつ）&lt;/p&gt;');
+  }
+  if (!t.winner) {
+    parts.push('&lt;div class="row" id="runoff"&gt;&lt;button onclick="makeRunoff(this)"&gt;決選投票フォームを作る（' + t.tied.length + ' 作品・1人1票）&lt;/button&gt;&lt;/div&gt;');
+  }
+  parts.push('&lt;div class="imgs"&gt;');
+  featured.forEach(function (key) {
+    let src = '';
+    try { src = thumbnailUrl_(presId, byKey[key].pageId); } catch (e) { src = ''; }
+    parts.push('&lt;figure class="' + (t.winner ? 'one' : 'many') + '"&gt;' + (src ? '&lt;img src="' + esc_(src) + '" alt="' + esc_(key) + '"&gt;' : '') +
+      '&lt;figcaption&gt;' + esc_(labelShort_(byKey[key])) + '&lt;/figcaption&gt;&lt;/figure&gt;');
+  });
+  parts.push('&lt;/div&gt;');
+  parts.push('&lt;table&gt;&lt;tr&gt;&lt;th&gt;順位&lt;/th&gt;&lt;th&gt;作品&lt;/th&gt;&lt;th&gt;票&lt;/th&gt;&lt;/tr&gt;');
+  let rank = 0;
+  let prev = null;
+  t.ranking.forEach(function (r, i) {
+    if (r.votes !== prev) { rank = i + 1; prev = r.votes; }
+    parts.push('&lt;tr&gt;&lt;td&gt;' + rank + '&lt;/td&gt;&lt;td&gt;' + esc_(labelShort_(r)) + '&lt;/td&gt;&lt;td&gt;' + r.votes + '&lt;/td&gt;&lt;/tr&gt;');
+  });
+  parts.push('&lt;/table&gt;');
+  parts.push('&lt;div class="row"&gt;&lt;button class="sub" onclick="google.script.host.close()"&gt;閉じる&lt;/button&gt;&lt;/div&gt;');
+
+  const script = '&lt;script&gt;var TIED = ' + JSON.stringify(t.tied) + ';&lt;/script&gt;';
+  const html = dialogPage_(parts.join('\n') + script);
+  SlidesApp.getUi().showModalDialog(HtmlService.createHtmlOutput(html).setWidth(900).setHeight(640), '集計');
+}
+
+/** ダイアログの外枠（見た目と、コピー・決選投票のボタンの動き） */
+function dialogPage_(body) {
+  return [
+    '&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;base target="_top"&gt;',
+    '&lt;style&gt;',
+    'body{font-family:"Noto Sans JP","Hiragino Sans",sans-serif;margin:0;padding:16px 20px;color:#202124;}',
+    'h2{font-size:20px;margin:0 0 8px;}',
+    '.label{font-size:13px;font-weight:700;margin:12px 0 4px;}',
+    '.note{font-size:13px;color:#5f6368;margin:6px 0;}',
+    '.warn{color:#b3261e;}',
+    'p.warn{font-size:13px;margin:6px 0;}',
+    'p.big{font-size:26px;font-weight:700;margin:8px 0 12px;}',
+    '.url{display:flex;gap:8px;}',
+    '.url input{flex:1;font-size:15px;padding:8px;border:1px solid #9aa0a6;border-radius:4px;}',
+    'button{font-size:15px;padding:8px 14px;border:1px solid #202124;background:#202124;color:#fff;border-radius:4px;cursor:pointer;}',
+    'button.sub{background:#fff;color:#202124;}',
+    'button:disabled{opacity:.5;cursor:default;}',
+    '.row{margin:14px 0;}',
+    '.imgs{display:flex;gap:12px;flex-wrap:wrap;}',
+    'figure{margin:0;max-width:100%;}',
+    'figure.one{width:520px;}',
+    'figure.many{width:260px;}',
+    'figure img{width:100%;border:1px solid #dadce0;}',
+    'figcaption{font-size:14px;margin-top:4px;}',
+    'table{border-collapse:collapse;margin-top:8px;font-size:14px;}',
+    'th,td{border-bottom:1px solid #dadce0;padding:4px 12px;text-align:left;}',
+    'a{color:#1a73e8;}',
+    '&lt;/style&gt;&lt;/head&gt;&lt;body&gt;',
+    body,
+    '&lt;script&gt;',
+    'function esc(s){return String(s).replace(/[&amp;&lt;&gt;"\']/g,function(c){return {"&amp;":"&amp;amp;","&lt;":"&amp;lt;","&gt;":"&amp;gt;","\\"":"&amp;quot;","\'":"&amp;#39;"}[c];});}',
+    'function copyUrl(id,btn){var el=document.getElementById(id);el.select();',
+    '  var done=function(){btn.textContent="コピーしました";};',
+    '  var legacy=function(){try{document.execCommand("copy");done();}catch(e){btn.textContent="選んで Ctrl+C";}};',
+    '  if(navigator.clipboard&amp;&amp;navigator.clipboard.writeText){navigator.clipboard.writeText(el.value).then(done,legacy);}else{legacy();}}',
+    'function makeRunoff(btn){btn.disabled=true;btn.textContent="作っています…（1分ほど）";',
+    '  google.script.run.withSuccessHandler(function(res){',
+    '    var box=document.getElementById("runoff");',
+    '    if(!res||!res.success){btn.disabled=false;btn.textContent="もう一度作る";',
+    '      box.insertAdjacentHTML("beforeend","&lt;p class=\\"warn\\"&gt;"+esc(res?res.message:"返事がありません")+"&lt;/p&gt;");return;}',
+    '    var h="&lt;p class=\\"label\\"&gt;決選投票のリンク（Meet のチャットに貼る）&lt;/p&gt;"+',
+    '      "&lt;div class=\\"url\\"&gt;&lt;input id=\\"r0\\" value=\\""+esc(res.responderUrl)+"\\" readonly&gt;"+',
+    '      "&lt;button onclick=\\"copyUrl(\'r0\',this)\\"&gt;コピー&lt;/button&gt;&lt;/div&gt;"+',
+    '      "&lt;p class=\\"note\\"&gt;"+esc(res.modeNote)+"&lt;/p&gt;"+',
+    '      "&lt;p class=\\"note\\"&gt;投票が終わったら、もう一度メニューの ③ 集計する を押してください。&lt;/p&gt;";',
+    '    box.innerHTML=h;',
+    '  }).withFailureHandler(function(err){btn.disabled=false;btn.textContent="もう一度作る";',
+    '    document.getElementById("runoff").insertAdjacentHTML("beforeend","&lt;p class=\\"warn\\"&gt;"+esc(err&amp;&amp;err.message?err.message:err)+"&lt;/p&gt;");',
+    '  }).createRunoffForm(TIED);}',
+    '&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;',
+  ].join('\n');
+}
+
+// =====================================================================
+// 小さな道具
+// =====================================================================
+
+/** 目印（代替テキストのタイトル）で図形を探す */
+function findShape_(slide, tag) {
+  const shapes = slide.getShapes();
+  for (let i = 0; i &lt; shapes.length; i++) {
+    if (shapes[i].getTitle() === tag) return shapes[i];
+  }
+  return null;
+}
+
+/** 図形の文字（前後の空白と最後の改行を除く）。図形がなければ空 */
+function textOf_(shape) {
+  return shape ? String(shape.getText().asString() || '').trim() : '';
+}
+
+/** 「No.12」→ 12。読めなければ 0 */
+function parseNo_(text) {
+  const m = String(text || '').match(/No\.?\s*(\d+)/i);
+  return m ? Number(m[1]) : 0;
+}
+
+/** 選択肢の文字の先頭から作品の目印（"No.12" か "No.12-2"）を取り出す */
+function keyOf_(value) {
+  const m = String(value || '').match(/^(No\.\d+(?:-\d+)?)/);
+  return m ? m[1] : '';
+}
+
+/** 「No.12　作品名」（作品名がなければ「（作品名なし）」） */
+function labelShort_(w) {
+  return w.key + '　' + (w.title || '（作品名なし）');
+}
+
+/** 「No.12　作品名｜ひとこと」（選択肢に画像を付けるとき用） */
+function labelLong_(w) {
+  const c = oneLine_(w.comment, CONFIG.COMMENT_MAX);
+  return labelShort_(w) + (c ? '｜' + c : '');
+}
+
+/** 改行をつなげて1行にし、長ければ切る */
+function oneLine_(text, max) {
+  const s = String(text || '').replace(/\s*\n\s*/g, ' ').trim();
+  return s.length &gt; max ? s.slice(0, max - 1) + '…' : s;
+}
+
+/** 全角の数字を半角に */
+function toHalfWidth_(text) {
+  return text.replace(/[０-９]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); });
+}
+
+/** 「1つ」「3つまで」 */
+function votesText_(votes) {
+  return votes === 1 ? '1つ' : votes + 'つまで';
+}
+
+/** 記録に残す作品の情報（スライドそのものは残せないので外す） */
+function storedWork_(w) {
+  return { key: w.key, no: w.no, title: w.title, comment: oneLine_(w.comment, CONFIG.COMMENT_MAX), pageId: w.pageId };
+}
+
+/** 文字に書式をつける（空の枠では効かないことがあるが、止めずに進む） */
+function style_(shape, size, bold, color) {
+  try {
+    const ts = shape.getText().getTextStyle().setFontSize(size).setBold(!!bold);
+    if (color) ts.setForegroundColor(color);
+  } catch (e) {
+    Logger.log('書式: ' + e.message);
+  }
+  return shape;
+}
+
+/** HTML に入れる文字をエスケープする（参加者が書いた作品名も入るので必ず通す） */
+function esc_(s) {
+  return String(s == null ? '' : s)
+    .replace(/&amp;/g, '&amp;amp;').replace(/&lt;/g, '&amp;lt;').replace(/&gt;/g, '&amp;gt;')
+    .replace(/"/g, '&amp;quot;').replace(/'/g, '&amp;#39;');
+}
+
+/**
+ * 紐づけた Cloud のプロジェクトで API が有効になっていないときの直し方。
+ * 例：「GCP プロジェクト 123 への API（drive）の有効化中に権限が拒否されました」（2026-10-24 本物で発生）
+ */
+function apiHint_(message) {
+  const names = { drive: 'Google Drive API', slides: 'Google Slides API', forms: 'Google Forms API' };
+  const m = String(message || '').match(/API[（(]\s*(\w+)\s*[）)]/) ||
+    String(message || '').match(/(drive|slides|forms)\.googleapis\.com/i);
+  if (!m || !/有効化|enable|has not been used|disabled/i.test(message)) return '';
+  const api = names[m[1].toLowerCase()] || m[1];
+  return '\n\n→ Cloud のコンソールの［API とサービス］→［ライブラリ］で「' + api + '」を有効にしてください（DEPLOY_GUIDE の Step 2-1）。';
+}
+
+/** 失敗を記録して（必要なら画面にも出して）、失敗の戻り値を返す */
+function fail_(label, e, showAlert) {
+  const raw = e &amp;&amp; e.message ? e.message : String(e);
+  const message = label + '\n\n' + raw + apiHint_(raw);
+  Logger.log(message + (e &amp;&amp; e.stack ? '\n' + e.stack : ''));
+  if (showAlert) {
+    try { SlidesApp.getUi().alert(message + '\n\nこの文を全文そのまま送ってください。'); } catch (ignore) { /* 画面がない */ }
+  }
+  return { success: false, message: message };
+}</pre>
+<!-- Code.gs ここまで -->
+    </div>
+  </section>
+
+  <section aria-labelledby="h-use">
+    <h2 id="h-use">設定のあとの使い方</h2>
+    <div class="menu">
+      <div><b>① 提出用スライドを用意する</b><p>説明のスライドと No.1〜No.40 の枠を作ります。会の前に1回だけ。</p></div>
+      <div><b>② 投票フォームを作る</b><p>作品のあるスライドだけを読んでフォームを作ります。票数は作品10点ごとに1票（23点なら3票）で、その場で変えられます。1〜2分待つと回答用のリンクが出ます。</p></div>
+      <div><b>③ 集計する</b><p>順位をダイアログに大きく出します。1位が同票なら「決選投票フォームを作る」ボタンが出ます（同票の作品だけ・1人1票）。</p></div>
+    </div>
+    <p class="meta">GAS を動かすのはスライドの持ち主だけです。参加者は貼る・投票するだけで、GAS にはさわりません。</p>
+  </section>
+
+  <section aria-labelledby="h-trouble">
+    <h2 id="h-trouble">止まったとき</h2>
+    <p>ダイアログに出た文の中の言葉で、原因が分かります。</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>出た文に含まれる言葉</th><th>原因</th><th>直し方</th></tr></thead>
+        <tbody>
+          <tr><td><code>has not been used in project</code> ／ <code>is disabled</code></td><td>Forms API が有効になっていないか、Cloud のプロジェクトが紐づいていない</td><td>手順2・手順6</td></tr>
+          <tr><td>API（drive）の有効化中に権限が拒否</td><td>Drive API が有効になっていない（括弧の中が slides なら Slides API）</td><td>手順2</td></tr>
+          <tr><td>許可の範囲が足りない</td><td><code>appsscript.json</code> が古いまま、または新しい権限をまだ許可していない</td><td>手順5で貼り直し、手順7でもう一度許可する</td></tr>
+          <tr><td><code>access_denied</code> ／ アクセスをブロック</td><td>テストユーザーに自分が入っていない</td><td>手順3の5</td></tr>
+          <tr><td>画像を取りに行けなかった（<code>fetch image</code>）</td><td>Forms のサーバから画像が見えない</td><td>ドライブの「デザインコンペ_投票用画像」の画像が「リンクを知っている全員：閲覧者」になっているか見る。組織のアカウントでは、リンクでの共有が管理者に止められていることがある</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">どれでもないときも、フォームは「画像を上に並べる形」でできあがります。そのまま配って投票できます。</p>
+  </section>
+
+  <section aria-labelledby="h-after">
+    <h2 id="h-after">会のあとに</h2>
+    <ul class="checks">
+      <li><span>スライドの共有を「編集者」から「閲覧者」に戻す（会の間だけ「リンクを知っている全員：編集者」にする）</span></li>
+      <li><span>ドライブにできたフォルダ「デザインコンペ_投票用画像」を消す（作品の画像がリンクで見られる状態で置いてあります）</span></li>
+      <li><span>接続の確認で作ったテストフォーム「【テスト】Forms API の確認」を消す</span></li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-status">
+    <h2 id="h-status">確かめたこと・まだのこと</h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>こと</th><th>結果</th></tr></thead>
+        <tbody>
+          <tr><td>手順7の接続の確認（選択肢に画像が付くか）</td><td><span class="tag gas">済み</span> 2026年10月24日。URL の書き方3通りとも ○</td></tr>
+          <tr><td>スライドを画像にする（Slides API）</td><td><span class="tag gas">済み</span> 2026年10月24日</td></tr>
+          <tr><td>①〜③と決選投票の流れ（GAS の中身）</td><td><span class="tag gas">済み</span> 本物の Google の代わりに置きかえた環境で74項目</td></tr>
+          <tr><td>本物の作品での ②・③（ログインなしで開けるか・かかる時間・スマホでの見え方）</td><td><span class="tag warn">まだ</span> 本番前のリハーサルで確かめる</td></tr>
+          <tr><td>会のあとにドライブの画像を消しても、フォームの画像が残るか</td><td><span class="tag warn">まだ</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span>GEG All Hokkaido デザインコンペ（2026年10月29日）のために作った仕組みです。</span>
+    <span>参考：Google for Developers「Set up Apps Script with the Forms API」 <a href="https://developers.google.com/workspace/forms/api/guides/apps-script-setup" target="_blank" rel="noopener">developers.google.com</a>（2026年9月3日更新の版を確認）</span>
+  </footer>
+</div>
+
+<script>
+/* コピーのボタン。だめなら中身を選んだ状態にして、手でコピーしてもらう */
+document.querySelectorAll("button[data-copy]").forEach(function (btn) {
+  var pre = document.getElementById(btn.getAttribute("data-copy"));
+  var out = btn.parentNode.querySelector(".copied");
+  function selectAll() {
+    var r = document.createRange(); r.selectNodeContents(pre);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    out.textContent = "選びました。コピーしてください";
+  }
+  btn.addEventListener("click", function () {
+    var text = pre.textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { out.textContent = "コピーしました"; }, selectAll);
+    } else {
+      selectAll();
+    }
+  });
+});
+</script>
+</body>
+</html>
